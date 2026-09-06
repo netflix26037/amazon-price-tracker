@@ -1,1 +1,39 @@
+name: فحص أسعار أمازون
 
+on:
+  schedule:
+    # يشتغل كل 6 ساعات (التوقيت بتوقيت UTC)
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}  # يسمح بتشغيله يدويًا من تبويب Actions
+
+permissions:
+  contents: write
+
+jobs:
+  check-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: تنزيل الكود
+        uses: actions/checkout@v4
+
+      - name: تجهيز بايثون
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: تثبيت المكتبات
+        run: pip install -r requirements.txt
+
+      - name: تشغيل فحص الأسعار
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python check_prices.py
+
+      - name: حفظ سجل الأسعار المحدث
+        run: |
+          git config user.name "price-bot"
+          git config user.email "price-bot@users.noreply.github.com"
+          git add prices_history.json
+          git diff --staged --quiet || git commit -m "تحديث سجل الأسعار"
+          git push
