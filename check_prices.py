@@ -3,9 +3,9 @@
 
 الفكرة:
 - يقرأ قائمة المنتجات من products.json
-- يفتح كل رابط ويحاول يستخرج السعر الحالي من صفحة أمازون
+- يفتح كل رابط ويحاول يستخرج السعر الحالي وصورة المنتج من صفحة أمازون
 - يقارن السعر بالسعر المحفوظ من آخر مرة (في prices_history.json)
-- لو السعر اتغيّر (خصوصًا لو نزل) يبعت رسالة على تيليجرام
+- لو السعر اتغيّر (خصوصًا لو نزل) يبعت رسالة على تيليجرام مع صورة المنتج
 - يحدّث prices_history.json بالسعر الجديد
 
 يشتغل عادة عن طريق GitHub Actions على جدول زمني (مثلاً كل 6 ساعات).
@@ -47,6 +47,13 @@ PRICE_SELECTORS = [
     {"class_": "a-offscreen"},
 ]
 
+# محاولات مختلفة لاستخراج صورة المنتج
+IMAGE_SELECTORS = [
+    {"id": "landingImage"},
+    {"id": "imgBlkFront"},
+    {"class_": "a-dynamic-image"},
+]
+
 
 def load_json(path: Path, default):
     if path.exists():
@@ -85,6 +92,37 @@ def extract_price(html: str):
     return None
 
 
+def extract_image(html: str):
+    """يحاول يستخرج رابط صورة المنتج الرئيسية من صفحة أمازون."""
+    soup = BeautifulSoup(html, "html.parser")
+
+    for selector in IMAGE_SELECTORS:
+        tag = soup.find(attrs=selector) if "class_" not in selector else soup.find(
+            class_=selector["class_"]
+        )
+        if not tag:
+            continue
+
+        # أمازون أحيانًا يخزن الصورة عالية الدقة في data-old-hires
+        # أو داخل خاصية data-a-dynamic-image (JSON فيه عدة أحجام)
+        img_url = tag.get("data-old-hires") or tag.get("src")
+
+        if not img_url:
+            dynamic_data = tag.get("data-a-dynamic-image")
+            if dynamic_data:
+                try:
+                    images = json.loads(dynamic_data)
+                    if images:
+                        img_url = next(iter(images))
+                except (json.JSONDecodeError, StopIteration):
+                    img_url = None
+
+        if img_url and img_url.startswith("http"):
+            return img_url
+
+    return None
+
+
 def clean_price(text: str):
     """يحوّل نص السعر (فيه فواصل/رموز) لرقم عشري."""
     cleaned = re.sub(r"[^\d.,]", "", text)
@@ -97,40 +135,56 @@ def clean_price(text: str):
         return None
 
 
-def fetch_price(url: str):
+def fetch_product_details(url: str):
+    """يرجع (السعر, رابط الصورة, رسالة خطأ)."""
     try:
         resp = requests.get(url, headers=HEADERS, timeout=20)
     except requests.RequestException as exc:
-        return None, f"خطأ في الاتصال: {exc}"
+        return None, None, f"خطأ في الاتصال: {exc}"
 
     if resp.status_code != 200:
-        return None, f"استجابة غير متوقعة من أمازون (كود {resp.status_code})"
+        return None, None, f"استجابة غير متوقعة من أمازون (كود {resp.status_code})"
 
     price = extract_price(resp.text)
+    image_url = extract_image(resp.text)
+
     if price is None:
-        return None, "لم أستطع إيجاد السعر في الصفحة (ربما تغيّر شكل الصفحة أو طُلب تحقق أمني)"
+        return None, image_url, "لم أستطع إيجاد السعر في الصفحة (ربما تغيّر شكل الصفحة أو طُلب تحقق أمني)"
 
-    return price, None
+    return price, image_url, None
 
 
-def send_telegram_message(text: str):
+def send_telegram_message(text: str, image_url: str = None):
+    """يرسل رسالة تيليجرام. لو فيه صورة يرسلها مع كابشن، وإلا نص عادي."""
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("تحذير: لم يتم ضبط TELEGRAM_BOT_TOKEN أو TELEGRAM_CHAT_ID، سيتم طباعة الرسالة فقط.")
         print(text)
         return
 
-    api_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    if image_url:
+        api_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
+        payload = {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "photo": image_url,
+            "caption": text[:1024],  # تيليجرام يحدد الكابشن بـ 1024 حرف
+            "parse_mode": "HTML",
+        }
+    else:
+        api_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+        payload = {
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": text,
+            "parse_mode": "HTML",
+            "disable_web_page_preview": True,
+        }
+
     try:
-        requests.post(
-            api_url,
-            data={
-                "chat_id": TELEGRAM_CHAT_ID,
-                "text": text,
-                "parse_mode": "HTML",
-                "disable_web_page_preview": True,
-            },
-            timeout=15,
-        )
+        resp = requests.post(api_url, data=payload, timeout=15)
+        if resp.status_code != 200 and image_url:
+            # لو فشل إرسال الصورة (مثلاً رابط الصورة منتهي أو غير صالح لتيليجرام)
+            # نرسل كنص عادي بدل ما نخسر التنبيه بالكامل
+            print(f"فشل إرسال الصورة (كود {resp.status_code})، سيتم الإرسال كنص.")
+            send_telegram_message(text, image_url=None)
     except requests.RequestException as exc:
         print(f"فشل إرسال رسالة تيليجرام: {exc}")
 
@@ -143,7 +197,7 @@ def main():
         print("لا توجد منتجات في products.json")
         return
 
-    messages = []
+    any_update = False
 
     for product in products:
         name = product.get("name", "منتج بدون اسم")
@@ -151,7 +205,7 @@ def main():
         if not url:
             continue
 
-        price, error = fetch_price(url)
+        price, image_url, error = fetch_product_details(url)
         time.sleep(2)  # فاصل بسيط بين الطلبات عشان منضغطش على أمازون
 
         if error:
@@ -159,9 +213,10 @@ def main():
             continue
 
         old_price = history.get(url, {}).get("price")
+        message = None
 
         if old_price is None:
-            messages.append(
+            message = (
                 f"🆕 <b>{name}</b>\n"
                 f"بدأت متابعة السعر: {price:.2f} ر.س\n"
                 f"{url}"
@@ -169,27 +224,29 @@ def main():
         elif price < old_price:
             diff = old_price - price
             pct = (diff / old_price) * 100
-            messages.append(
+            message = (
                 f"🔻 <b>{name}</b>\n"
                 f"نزل السعر من {old_price:.2f} إلى {price:.2f} ر.س "
                 f"(خصم {pct:.0f}%)\n"
                 f"{url}"
             )
         elif price > old_price:
-            messages.append(
+            message = (
                 f"🔺 <b>{name}</b>\n"
                 f"ارتفع السعر من {old_price:.2f} إلى {price:.2f} ر.س\n"
                 f"{url}"
             )
         # لو السعر زي ما هو، منبعتش رسالة
 
+        if message:
+            send_telegram_message(message, image_url=image_url)
+            any_update = True
+
         history[url] = {"name": name, "price": price}
 
     save_json(HISTORY_FILE, history)
 
-    if messages:
-        full_message = "\n\n".join(messages)
-        send_telegram_message(full_message)
+    if any_update:
         print("تم إرسال التحديثات.")
     else:
         print("لا توجد تغييرات في الأسعار هذه المرة.")
