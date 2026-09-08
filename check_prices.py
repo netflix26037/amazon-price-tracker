@@ -206,7 +206,7 @@ def main():
             continue
 
         price, image_url, error = fetch_product_details(url)
-        time.sleep(30)  # فاصل 30 ثانية بين الطلبات عشان منضغطش على أمازون ونقلل فرصة الحظر/التحقق الأمني
+        time.sleep(15)  # فاصل 15 ثانية بين الطلبات عشان منضغطش على أمازون بدون ما ياخذ وقت طويل جدًا
 
         if error:
             print(f"[{name}] {error}")
