@@ -585,7 +585,7 @@
   },
   "https://amzn.eu/d/00sQY2qK": {
     "name": "أرز بسمتي هندي من جرين فارمز، حبة طويلة، وزن 5 كيلوجرام، عبوة واحدة",
-    "price": 46.0
+    "price": 31.0
   },
   "https://amzn.eu/d/0bFREj5H": {
     "name": "أرز بسمتي أبيض هندي من بنجابي المهيدب، كيس، وزن 5 كيلوجرامات",
@@ -1041,7 +1041,7 @@
   },
   "https://amzn.eu/d/0dzEzz8h": {
     "name": "هيد اند شولدرز شامبو ديلي كلين ضد القشرة بتقنية ماكس فوم، مثبت سريريا، 1 لتر",
-    "price": 28.0
+    "price": 27.0
   },
   "https://amzn.eu/d/0ex9Hnd4": {
     "name": "شامبو ادفانسد مضاد لتساقط الشعر بالبصل وجوز الهند من باراشوت| يقوي الشعر ويقلل من تساقطه وينقي فروة الرأس| 0% مواد كيميائية ضارة | 340 مل",
@@ -1121,7 +1121,7 @@
   },
   "https://amzn.eu/d/07pNYKn3": {
     "name": "شامبو شعر الفيف اكسترا اورديناري بالزيت المغذي للشعر العادي الى الجاف لتغذية فورية للشعر الناعم من لوريال باريس، 600 مل",
-    "price": 14.0
+    "price": 15.0
   },
   "https://amzn.eu/d/0gaZNBIh": {
     "name": "شامبو زيت ايليف اكسترا اورديناري من لوريال باريس للشعر الجاف وشديد الجفاف، 200 مل",
@@ -1369,7 +1369,7 @@
   },
   "https://www.amazon.sa/dp/B00MQURNGG": {
     "name": "فارماسيريس للجنسين التساقط بالكافيين والبيوتين",
-    "price": 64.0
+    "price": 70.0
   },
   "https://www.amazon.sa/dp/B083JK13DH": {
     "name": "جينيسيس نيوتري فورتيفيانت كيراستاس، للشعر",
@@ -2113,7 +2113,7 @@
   },
   "https://www.amazon.sa/dp/B0CNJ4CFTX": {
     "name": "استحمام للنساء سيجنتشر كوليكشن ستروبيري",
-    "price": 100.0
+    "price": 116.0
   },
   "https://www.amazon.sa/dp/B0H943ZBDH": {
     "name": "الجسم الروائح الكريهة والتنظيف العميق",
@@ -2410,5 +2410,545 @@
   "https://www.amazon.sa/dp/B01BSPM382": {
     "name": "دوف اكسترا فريش للرجال 400",
     "price": 25.0
+  },
+  "https://amzn.eu/d/0fYPb12h": {
+    "name": "حليب كامل الدسم من نادك طويل الأجل، 12 عبوة ×1 لتر",
+    "price": 49.0
+  },
+  "https://amzn.eu/d/00yKiqC2": {
+    "name": "شامبو الفيف هايالورون للكثافة والترطيب، بترطيب يدوم 72 ساعة من لوريال باريس، بحجم 600 مل",
+    "price": 14.0
+  },
+  "https://amzn.eu/d/0a4YcKBM": {
+    "name": "شامبو منظف عميق لفروة الرأس شديدة الحكة، شامبو مضاد للقشرة، خالي من السيليكون والبارابين والبارافين، 400 مل من هيد اند شولدرز",
+    "price": 15.0
+  },
+  "https://amzn.eu/d/05bcLGFC": {
+    "name": "باراشوت شامبو ادفانسد ايفري داي شاين باللوز وجوز الهند | يغذي ويوفر ترطيبًا مكثفًا للشعر | 0% مواد كيميائية ضارة | 340 مل",
+    "price": 11.0
+  },
+  "https://amzn.eu/d/07osVPxY": {
+    "name": "شامبو وبلسم من لوريال باريس للمعان عالي 360 مليلتر",
+    "price": 10.0
+  },
+  "https://www.amazon.sa/dp/B0GX6DR5XG": {
+    "name": "شامبو صانسيلك، طويل ولبصيلات قوية",
+    "price": 11.0
+  },
+  "https://www.amazon.sa/dp/B07N6J3LQT": {
+    "name": "شامبو للشعر والتالف الزيتون بيرت",
+    "price": 7.0
+  },
+  "https://www.amazon.sa/dp/B07MTSV8V1": {
+    "name": "غسول ترطيب عميق للاستحمام، الأصلي",
+    "price": 18.0
+  },
+  "https://www.amazon.sa/dp/B0F3NB15P2": {
+    "name": "الجسم لتغذية البشرة فاتيكا ناتشرالز",
+    "price": 7.0
+  },
+  "https://www.amazon.sa/dp/B07G2RBR5B": {
+    "name": "جونسون والانتعاش، الاستحمام بالبشرة، والجلسرين",
+    "price": 17.0
+  },
+  "https://www.amazon.sa/dp/B07G2DLJ2P": {
+    "name": "جونسون بالبابايا، والانتعاش، الاستحمام والجلسرين",
+    "price": 11.0
+  },
+  "https://www.amazon.sa/dp/B07V64GXV8": {
+    "name": "الاكاسيا الميسيلار خالي من البارابين والسيليكون انشانتور",
+    "price": 19.0
+  },
+  "https://www.amazon.sa/dp/B0BNNQLMXR": {
+    "name": "جل استحمام دايناميك بالس اديداس",
+    "price": 22.0
+  },
+  "https://www.amazon.sa/dp/B00UCHWCN4": {
+    "name": "فيلوسوفي استحمام بالقرفة فقاعات الجسم",
+    "price": 147.0
+  },
+  "https://www.amazon.sa/dp/B08WJCSJ9Y": {
+    "name": "غسول للجسم كوكو مامايرث، 300",
+    "price": 32.0
+  },
+  "https://www.amazon.sa/dp/B0CJ9XSW23": {
+    "name": "استحمام بوريفيرا بجوز الهند 750",
+    "price": 9.0
+  },
+  "https://www.amazon.sa/dp/B001B7LW26": {
+    "name": "ذا بدي شوب استحمام مانجو",
+    "price": 96.0
+  },
+  "https://www.amazon.sa/dp/B0DGGKWD5N": {
+    "name": "الجسم المرطب المعطر جويلرو، استحمام",
+    "price": 204.0
+  },
+  "https://www.amazon.sa/dp/B084PTR88D": {
+    "name": "يونيليفر ايفز مستخلصات الحيوانات البارابين",
+    "price": 84.0
+  },
+  "https://www.amazon.sa/dp/B0G8L1T1GZ": {
+    "name": "كوزمو للعناية بالبشرة والرجال، والفانيليا",
+    "price": 53.0
+  },
+  "https://www.amazon.sa/dp/B08167HXK8": {
+    "name": "استحمام برائحة اللافندر اونصة قطعتين",
+    "price": 162.0
+  },
+  "https://www.amazon.sa/dp/B07YCWYVN9": {
+    "name": "فيلوسوفي استحمام بالفانيليا فقاعات الاستحمام",
+    "price": 141.0
+  },
+  "https://www.amazon.sa/dp/B0DZK1FQC1": {
+    "name": "استحمام بالفراولة والتوت لتنظيف وتنعيم",
+    "price": 38.0
+  },
+  "https://www.amazon.sa/dp/B0D45VS8RR": {
+    "name": "استحمام للرجال فيتامين والصبار سائلة،",
+    "price": 298.0
+  },
+  "https://www.amazon.sa/dp/B096HD95KC": {
+    "name": "دكتور ليفت للبكتيريا، اونصة",
+    "price": 197.0
+  },
+  "https://www.amazon.sa/dp/B072VKJVJD": {
+    "name": "استحمام الأعشاب البحرية الأرغان بيتال",
+    "price": 37.0
+  },
+  "https://www.amazon.sa/dp/B09BVCRSLR": {
+    "name": "الاسنان الكهربائية فايتاليتي بي للسفر،",
+    "price": 125.0
+  },
+  "https://www.amazon.sa/dp/B0CGLWT38N": {
+    "name": "فرشاة أسنان كهربائية لإعادة اورال بي،",
+    "price": 359.0
+  },
+  "https://www.amazon.sa/dp/B0DR6Z9QSL": {
+    "name": "فرشاة أسنان بيضاء متنوعة سنسوداين",
+    "price": 31.0
+  },
+  "https://www.amazon.sa/dp/B073HC7WHW": {
+    "name": "ديفينس للتنظيف الأسنان بشعيرات اورال بي",
+    "price": 15.0
+  },
+  "https://www.amazon.sa/dp/B0CDM8235P": {
+    "name": "منتج بدون وصف (يرجى المراجعة يدويًا) - B0CDM8235P",
+    "price": 1365.0
+  },
+  "https://www.amazon.sa/dp/B081QY84M2": {
+    "name": "فرشاة اسنان رفيعة بالفحم كولجيت",
+    "price": 19.0
+  },
+  "https://www.amazon.sa/dp/B0CFXLHFG7": {
+    "name": "الأسنان والتبييض ببطارية اورال بي، Db400 010،",
+    "price": 45.0
+  },
+  "https://www.amazon.sa/dp/B07PZL5C9Q": {
+    "name": "سينسوداين حماية متقدمة ناعمة، قطعتين",
+    "price": 19.0
+  },
+  "https://www.amazon.sa/dp/B07PHZ58NB": {
+    "name": "فرشاة أسنان متوسطة الحجم اورال بي",
+    "price": 15.0
+  },
+  "https://www.amazon.sa/dp/B0887TH153": {
+    "name": "اوبتيك بشعيرات كولجيت الأسنان، اقتصادية",
+    "price": 14.0
+  },
+  "https://www.amazon.sa/dp/B08WWKDHGJ": {
+    "name": "كورابروكس للعناية باللثة للبالغين النعومة",
+    "price": 68.0
+  },
+  "https://www.amazon.sa/dp/B00E4KY6TI": {
+    "name": "ثلاثية المفعول كولجيت، متوسطة، الألوان،",
+    "price": 9.0
+  },
+  "https://www.amazon.sa/dp/B0D5D11MFW": {
+    "name": "اورال بي سينسيتيف اند جامز",
+    "price": 23.0
+  },
+  "https://www.amazon.sa/dp/B07P75SF5L": {
+    "name": "للتنظيف الأسنان متوسطة كولجيت قطعتين",
+    "price": 14.0
+  },
+  "https://www.amazon.sa/dp/B08G5GPXHR": {
+    "name": "مجموعة فرشاة بالمينا كولجيت، النعومة",
+    "price": 50.0
+  },
+  "https://www.amazon.sa/dp/B084LGTB82": {
+    "name": "اورال بي فرشاة سينسيتيف النعومة",
+    "price": 22.0
+  },
+  "https://www.amazon.sa/dp/B0BPCWZK65": {
+    "name": "فرشاة اسنان اورال بى بالبطارية، تلقائي،",
+    "price": 86.0
+  },
+  "https://www.amazon.sa/dp/B09J4KSF6Z": {
+    "name": "بكتيريا اورال بي تشكيلة اكسبرت، متعددة،",
+    "price": 27.0
+  },
+  "https://www.amazon.sa/dp/B0844797JQ": {
+    "name": "كولجيت بشعيرات متوسطة زيجزاج للبالغين",
+    "price": 17.0
+  },
+  "https://www.amazon.sa/dp/B074P63N4W": {
+    "name": "اكسبرت النعومة للأسنان الحساسة اورال بي،",
+    "price": 21.0
+  },
+  "https://www.amazon.sa/dp/B0H2HT9RF6": {
+    "name": "فرشاة اسنان كهربائية للبالغين لايفين",
+    "price": 459.0
+  },
+  "https://www.amazon.sa/dp/B0D7YQXYXG": {
+    "name": "فرشاة أسنان كهربائية سمايل، بينك",
+    "price": 164.0
+  },
+  "https://www.amazon.sa/dp/B0FFS9TZ7P": {
+    "name": "اي ام كهربائية للبالغين والاطفال",
+    "price": 55.0
+  },
+  "https://www.amazon.sa/dp/B0D8ZPSHBL": {
+    "name": "افانتي بشعيرات النعومة تارا الحساسة",
+    "price": 9.0
+  },
+  "https://www.amazon.sa/dp/B07PY4RR59": {
+    "name": "متعرجة كولجيت متوسطة القساوة، مجموعة",
+    "price": 14.0
+  },
+  "https://www.amazon.sa/dp/B0D8BB38TJ": {
+    "name": "للعناية باللثة اورال عائلية للبالغين",
+    "price": 21.0
+  },
+  "https://www.amazon.sa/dp/B0F9P6FPNP": {
+    "name": "سيجو كهربائية للبالغين فرشاة، والاطفال",
+    "price": 174.0
+  },
+  "https://www.amazon.sa/dp/B000KZML7A": {
+    "name": "كولجيت فرشاة اسنان متوسطة درجة",
+    "price": 13.0
+  },
+  "https://www.amazon.sa/dp/B0GQBDJFNT": {
+    "name": "كهربائية للبالغين والمراهقين للعناية اليومية",
+    "price": 69.0
+  },
+  "https://www.amazon.sa/dp/B0FLKG5YWD": {
+    "name": "بي اند دي للبالغين للعناية",
+    "price": 4.0
+  },
+  "https://www.amazon.sa/dp/B0BCK2S9VL": {
+    "name": "ميريدول فرشاة اسنان ناعمة قطعتين",
+    "price": 30.0
+  },
+  "https://www.amazon.sa/dp/B07P9VDN8P": {
+    "name": "سنسوداين للأسنان الحساسة، بشعيرات النعومة،",
+    "price": 33.0
+  },
+  "https://www.amazon.sa/dp/B06WRNCHXH": {
+    "name": "كورابروكس بشعيرات والاسنان الحساسة، التفاصيل،",
+    "price": 36.0
+  },
+  "https://www.amazon.sa/dp/B00E4UKLSI": {
+    "name": "فرشاة اسنان بشعيرات للبكتيريا متعددة",
+    "price": 22.0
+  },
+  "https://www.amazon.sa/dp/B08G5J8YQP": {
+    "name": "كولجيت بشعيرات النعومة للبالغين، الألوان",
+    "price": 49.0
+  },
+  "https://www.amazon.sa/dp/B0GGQR1PY3": {
+    "name": "سيوسى الاسنان للاستعمال والفندق ومستلزمات",
+    "price": 36.0
+  },
+  "https://www.amazon.sa/dp/B0CP3P3GRW": {
+    "name": "الخيزران، بشعيرات النعومة، البيولوجي، الحساسة،",
+    "price": 43.0
+  },
+  "https://www.amazon.sa/dp/B07F13VXMT": {
+    "name": "الأبعاد النعومة بالاهتزاز اورال بي",
+    "price": 42.0
+  },
+  "https://www.amazon.sa/dp/B0FBKVTCWM": {
+    "name": "ثلاثية الجوانب للاطفال والاسنان، للانزلاق",
+    "price": 19.0
+  },
+  "https://www.amazon.sa/dp/B0D8P7CX76": {
+    "name": "الخيزران الطبيعي البيولوجي البيسفينول للبالغين،",
+    "price": 36.0
+  },
+  "https://www.amazon.sa/dp/B07H8S4M27": {
+    "name": "تيبي 322383",
+    "price": 30.0
+  },
+  "https://www.amazon.sa/dp/B0GFJ8W642": {
+    "name": "لينجي للاستعمال للاستخدام والتخييم مختلطة،",
+    "price": 37.0
+  },
+  "https://www.amazon.sa/dp/B0BZ4W4ZKX": {
+    "name": "بالبطارية للأطفال اورال بي، أميرات برينسس،",
+    "price": 68.0
+  },
+  "https://www.amazon.sa/dp/B077VVJXZ7": {
+    "name": "كورابروكس النعومة، بشعيرات كورن® للبالغين",
+    "price": 33.0
+  },
+  "https://www.amazon.sa/dp/B0039TF3A6": {
+    "name": "فرشاة اسنان جراحية للبالغين كوروبروكس",
+    "price": 39.0
+  },
+  "https://www.amazon.sa/dp/B07P9W17R4": {
+    "name": "للاسنان الحساسة سنسوداين، بشعيرات الألوان",
+    "price": 34.0
+  },
+  "https://www.amazon.sa/dp/B0010EJ4L6": {
+    "name": "تيبي نوفا متوسط، 1، متوسط",
+    "price": 15.0
+  },
+  "https://www.amazon.sa/dp/B0D8QCMG51": {
+    "name": "ومعجون ازوني، والتخييم والانشطة الخارجية",
+    "price": 39.0
+  },
+  "https://www.amazon.sa/dp/B0GLPRDKTY": {
+    "name": "الاسنان للاستعمال واحدة معجون اسنان",
+    "price": 49.0
+  },
+  "https://www.amazon.sa/dp/B0BSQZM973": {
+    "name": "بشعيرات تويجو، مجموعة للبالغين، ماليزيا",
+    "price": 26.0
+  },
+  "https://www.amazon.sa/dp/B0DLG53Q59": {
+    "name": "فرشاة اسنان مسبقة للاستعمال افيستار",
+    "price": 144.0
+  },
+  "https://www.amazon.sa/dp/B0868HL1DJ": {
+    "name": "كهربائية صناعية اورال بي D706 514 6X، تلقائي،",
+    "price": 500.0
+  },
+  "https://www.amazon.sa/dp/B0FH2NP1M1": {
+    "name": "للاستعمال للعناية الكاملة للاستخدام والسفر",
+    "price": 59.0
+  },
+  "https://www.amazon.sa/dp/B0FFSB47BG": {
+    "name": "اي ام كهربائية للبالغين والاطفال",
+    "price": 55.0
+  },
+  "https://www.amazon.sa/dp/B08QT9N54V": {
+    "name": "والاسنان وحماية اللثة ليسترين، خفيفة،",
+    "price": 28.0
+  },
+  "https://www.amazon.sa/dp/B07P6NJ48M": {
+    "name": "بالفلورايد وتركيبة الجراثيم والحماية ليستيرين،",
+    "price": 14.0
+  },
+  "https://www.amazon.sa/dp/B0B7Z1MX2S": {
+    "name": "ادفانسد بالفلورايد الأبيض النعناع ليسترين،",
+    "price": 17.0
+  },
+  "https://www.amazon.sa/dp/B0DJ5CX95S": {
+    "name": "اكسترا للعناية اليومية باللثة بارادونتاكس،",
+    "price": 32.0
+  },
+  "https://www.amazon.sa/dp/B07NYZCNH4": {
+    "name": "غسول الفم ليسترين بالشاي الأخضر",
+    "price": 20.0
+  },
+  "https://www.amazon.sa/dp/B073Z95QD3": {
+    "name": "غسول الفم بلاكس فريش كولجيت",
+    "price": 16.0
+  },
+  "https://www.amazon.sa/dp/B0762Q8MX1": {
+    "name": "كولجيت غسول بالنعناع المنعش بلاكس",
+    "price": 13.0
+  },
+  "https://www.amazon.sa/dp/B07P9WNWH8": {
+    "name": "غسول الفم فريش كولجيت بلاكس،",
+    "price": 16.0
+  },
+  "https://www.amazon.sa/dp/B0FH71TFGX": {
+    "name": "بارادونتاكس اكسترا للعناية اليومية باللثة",
+    "price": 27.0
+  },
+  "https://www.amazon.sa/dp/B07PKHH93N": {
+    "name": "غسول الفم كولجيت اوبتيك لتبييض",
+    "price": 29.0
+  },
+  "https://www.amazon.sa/dp/B0D31ZB4SW": {
+    "name": "غسول المضاد للبكتيريا كلوس قطعتين",
+    "price": 32.0
+  },
+  "https://www.amazon.sa/dp/B0DY82TD1X": {
+    "name": "ليستيرين، للبكتيريا والبلاك الكريهة، وانتعاش",
+    "price": 16.0
+  },
+  "https://www.amazon.sa/dp/B0CWHGQ22R": {
+    "name": "ليستيرين كلينيكال سولوشنز، لالتهاب الجراثيم",
+    "price": 261.0
+  },
+  "https://www.amazon.sa/dp/B0DQJHDWQH": {
+    "name": "عبوات غسول الفم مناسب للسفر",
+    "price": 97.0
+  },
+  "https://www.amazon.sa/dp/B006USGEOC": {
+    "name": "ليستيرين غسول الفم توتال ميلدر",
+    "price": 44.0
+  },
+  "https://www.amazon.sa/dp/B004KVCV6G": {
+    "name": "كولجيت غسول المطهر بيروكسيل، نعناع",
+    "price": 94.0
+  },
+  "https://www.amazon.sa/dp/B0052FZ35A": {
+    "name": "شرائح تحسين النعناع المنعش ليستيرين",
+    "price": 58.0
+  },
+  "https://www.amazon.sa/dp/B0787C4N1P": {
+    "name": "بريليانس لتبييض الأسنان النعناع كريست",
+    "price": 641.0
+  },
+  "https://www.amazon.sa/dp/B0BTDJTNHC": {
+    "name": "معجون بارادونتاكس الحساسة، والنفس المنعش",
+    "price": 34.0
+  },
+  "https://www.amazon.sa/dp/B0D97PZD5Z": {
+    "name": "معجون أسنان لإزالة البقع اب",
+    "price": 10.0
+  },
+  "https://www.amazon.sa/dp/B0FV7V96WQ": {
+    "name": "معجون أسنان اكسترا سنسوداين، عبوتين",
+    "price": 44.0
+  },
+  "https://www.amazon.sa/dp/B07Q1PJNJL": {
+    "name": "معجون اسنان اكسترا فريش سينسوداين",
+    "price": 33.0
+  },
+  "https://www.amazon.sa/dp/B06XDVRKML": {
+    "name": "الأسنان دايموند اتراكشن كلوس لأسنان",
+    "price": 12.0
+  },
+  "https://www.amazon.sa/dp/B0DHDB4BM5": {
+    "name": "معجون أسنان اوبتيك ريفيل، كولجيت",
+    "price": 45.0
+  },
+  "https://www.amazon.sa/dp/B07YF5C3R9": {
+    "name": "بارادونتاكس معجون الاسنان بحماية اضافية",
+    "price": 32.0
+  },
+  "https://www.amazon.sa/dp/B07P75SCK8": {
+    "name": "اب معجون اسنان تريبل برائحة",
+    "price": 6.0
+  },
+  "https://www.amazon.sa/dp/B07L7PQ2CD": {
+    "name": "معجون مستخلصات طبيعية كولجيت، بالفحم",
+    "price": 14.0
+  },
+  "https://www.amazon.sa/dp/B0D9GW4253": {
+    "name": "معجون أسنان برائحة بلاست، وانتعاش",
+    "price": 9.0
+  },
+  "https://www.amazon.sa/dp/B0D1VNBSBV": {
+    "name": "الأسنان كلينيكال للأسنان الحساسة سنسوداين",
+    "price": 43.0
+  },
+  "https://www.amazon.sa/dp/B0D62ZZWPP": {
+    "name": "معجون أسنان برائحة النعناع المنعش",
+    "price": 5.0
+  },
+  "https://www.amazon.sa/dp/B077XQRZY9": {
+    "name": "معجون ديلوكس فيتاليزينج المينا كريست",
+    "price": 16.0
+  },
+  "https://www.amazon.sa/dp/B07ZZMJGX3": {
+    "name": "سنستيفيتي للاسنان الحساسة وتعزيز سنسوداين",
+    "price": 19.0
+  },
+  "https://www.amazon.sa/dp/B083X766GZ": {
+    "name": "ادفانسد وايتمن كولجيت، مجموعة عبوتين",
+    "price": 16.0
+  },
+  "https://www.amazon.sa/dp/B07PLD91Z4": {
+    "name": "معجون أسنان ديلوكس اركتيك كريست",
+    "price": 17.0
+  },
+  "https://www.amazon.sa/dp/B0D31P1KS3": {
+    "name": "سينسيتف للتبييض كولجيت، للحساسية والدائمة",
+    "price": 71.0
+  },
+  "https://www.amazon.sa/dp/B07NWX3WLT": {
+    "name": "معجون اسنان ادفانسد وايتنينج كولجيت",
+    "price": 16.0
+  },
+  "https://www.amazon.sa/dp/B0GL2DZ162": {
+    "name": "كولجيت معجون اسنان كلين فريش",
+    "price": 5.0
+  },
+  "https://www.amazon.sa/dp/B0C6KWHCQ4": {
+    "name": "معجون أسنان كريست كلينك الترا",
+    "price": 33.0
+  },
+  "https://www.amazon.sa/dp/B0F9Y7P52R": {
+    "name": "معجون اسنان ايفر للبكتيريا كلوس",
+    "price": 14.0
+  },
+  "https://www.amazon.sa/dp/B0BNF22LRH": {
+    "name": "معجون أسنان لاسنان الحساسة بيوريبير",
+    "price": 25.0
+  },
+  "https://www.amazon.sa/dp/B07P7PWT37": {
+    "name": "سيغنال للحماية من التسوس وتقوية الأسنان",
+    "price": 4.0
+  },
+  "https://www.amazon.sa/dp/B0943F6QVQ": {
+    "name": "معجون أسنان بيرل وايت كريست",
+    "price": 27.0
+  },
+  "https://www.amazon.sa/dp/B0F61BG9QS": {
+    "name": "للحماية القصوى من التسوس كولجيت",
+    "price": 35.0
+  },
+  "https://www.amazon.sa/dp/B07VGS1H8S": {
+    "name": "معجون اسنان كلوس المنثول المنعش",
+    "price": 48.0
+  },
+  "https://www.amazon.sa/dp/B0FHF3ZC9T": {
+    "name": "بانانا النعناع لحماية المينا والانتعاش",
+    "price": 39.0
+  },
+  "https://www.amazon.sa/dp/B0B59VLBZ4": {
+    "name": "معجون الحماية المتكاملة للتبييض بارودونتاكس",
+    "price": 41.0
+  },
+  "https://www.amazon.sa/dp/B0FKN6M8NZ": {
+    "name": "معجون أسنان مايسمايل النعناع لإزالة التسوس",
+    "price": 69.0
+  },
+  "https://www.amazon.sa/dp/B0BCK4KNRB": {
+    "name": "معجون أسنان طبي 75 ميريدول",
+    "price": 36.0
+  },
+  "https://www.amazon.sa/dp/B0H3NZG2Q8": {
+    "name": "لإزالة والتبييض والانتعاش وتخفيف الحساسية",
+    "price": 47.0
+  },
+  "https://www.amazon.sa/dp/B00TPL4LNC": {
+    "name": "معجون الاسنان اوبتيك اللامع كولجيت",
+    "price": 33.0
+  },
+  "https://www.amazon.sa/dp/B085VQ82QR": {
+    "name": "للبلاك والاسنان المهدئة ايموفورم ار، قطعتين",
+    "price": 44.0
+  },
+  "https://www.amazon.sa/dp/B01MA4QQN7": {
+    "name": "بيوربير للعناية للأطفال بالفلورايد النعناع",
+    "price": 28.0
+  },
+  "https://www.amazon.sa/dp/B007GMEAI8": {
+    "name": "بريف دينت معجون اسنان ان هاب",
+    "price": 71.0
+  },
+  "https://www.amazon.sa/dp/B073FDH9BY": {
+    "name": "جانوزي الجانوديرما دي اكس ان",
+    "price": 47.0
+  },
+  "https://www.amazon.sa/dp/B0FF4HVHVJ": {
+    "name": "معجون بالنعناع، المينا النفس",
+    "price": 69.0
   }
 }
