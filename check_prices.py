@@ -27,6 +27,10 @@ HISTORY_FILE = Path("prices_history.json")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
+# إفصاح إلزامي حسب اتفاقية تشغيل برنامج أمازون أسوشييتس.
+# يُضاف تلقائيًا في نهاية كل رسالة تحتوي على رابط منتج.
+AFFILIATE_DISCLOSURE = "📌 بصفتي شريك أمازون أسوشييتس، أكسب عمولة من المشتريات المؤهلة."
+
 # نتظاهر بأننا متصفح حقيقي عشان نقلل فرصة الحظر
 HEADERS = {
     "User-Agent": (
@@ -219,7 +223,8 @@ def main():
             message = (
                 f"🆕 <b>{name}</b>\n"
                 f"بدأت متابعة السعر: {price:.2f} ر.س\n"
-                f"{url}"
+                f"{url}\n\n"
+                f"{AFFILIATE_DISCLOSURE}"
             )
         elif price < old_price:
             diff = old_price - price
@@ -228,13 +233,15 @@ def main():
                 f"🔻 <b>{name}</b>\n"
                 f"نزل السعر من {old_price:.2f} إلى {price:.2f} ر.س "
                 f"(خصم {pct:.0f}%)\n"
-                f"{url}"
+                f"{url}\n\n"
+                f"{AFFILIATE_DISCLOSURE}"
             )
         elif price > old_price:
             message = (
                 f"🔺 <b>{name}</b>\n"
                 f"ارتفع السعر من {old_price:.2f} إلى {price:.2f} ر.س\n"
-                f"{url}"
+                f"{url}\n\n"
+                f"{AFFILIATE_DISCLOSURE}"
             )
         # لو السعر زي ما هو، منبعتش رسالة
 
