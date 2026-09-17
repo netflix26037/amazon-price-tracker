@@ -1,0 +1,47 @@
+name: Track Products
+
+on:
+  push:
+    paths:
+      - "products.json"
+  schedule:
+    # يشغّل فحص الأسعار للمنتجات القديمة يوميًا الساعة 6 صباحًا UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+          # فعّل السطر التالي بعد ربط دالة get_price_via_paapi بالمكتبة الرسمية
+          # pip install paapi5-python-sdk
+
+      - name: Run tracker
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          AMAZON_PAAPI_ACCESS_KEY: ${{ secrets.AMAZON_PAAPI_ACCESS_KEY }}
+          AMAZON_PAAPI_SECRET_KEY: ${{ secrets.AMAZON_PAAPI_SECRET_KEY }}
+          AMAZON_PAAPI_PARTNER_TAG: ${{ secrets.AMAZON_PAAPI_PARTNER_TAG }}
+        run: python track_products.py
+
+      - name: Commit updated state
+        run: |
+          git config user.name "products-tracker-bot"
+          git config user.email "actions@github.com"
+          git add state.json
+          git diff --cached --quiet || git commit -m "تحديث حالة تتبع المنتجات"
+          git push
