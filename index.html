@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دفتر المنتجات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F3EE;
+    --ink:#1C1A17;
+    --ink-soft:#5B5648;
+    --accent:#7B2D3D;
+    --accent-ink:#FFFFFF;
+    --accent-2:#B4832A;
+    --line:#DCD6C9;
+    --card:#FFFFFF;
+    --card-hover:#FBFAF7;
+    --chip-bg:#EDE9DF;
+    --chip-active-bg:#7B2D3D;
+    --chip-active-ink:#FFFFFF;
+    --focus:#2F6F5E;
+  }
+  :root:not([data-theme="light"]){
+    /* respects prefers-color-scheme when no explicit light override */
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#171512;
+      --ink:#EFEAE0;
+      --ink-soft:#B7AF9C;
+      --accent:#D8697D;
+      --accent-ink:#1C1A17;
+      --accent-2:#E0AC50;
+      --line:#332F28;
+      --card:#211E19;
+      --card-hover:#282420;
+      --chip-bg:#242019;
+      --chip-active-bg:#D8697D;
+      --chip-active-ink:#1C1A17;
+      --focus:#5FBFA3;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171512;
+    --ink:#EFEAE0;
+    --ink-soft:#B7AF9C;
+    --accent:#D8697D;
+    --accent-ink:#1C1A17;
+    --accent-2:#E0AC50;
+    --line:#332F28;
+    --card:#211E19;
+    --card-hover:#282420;
+    --chip-bg:#242019;
+    --chip-active-bg:#D8697D;
+    --chip-active-ink:#1C1A17;
+    --focus:#5FBFA3;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+    min-height:100vh;
+  }
+  h1,h2,.brand,.chip,.count-badge{
+    font-family:'Cairo', sans-serif;
+  }
+
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    padding:18px 20px 14px;
+  }
+  .topbar-inner{
+    max-width:1180px; margin:0 auto;
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  }
+  .brand{
+    font-weight:800; font-size:1.5rem; letter-spacing:.2px;
+    white-space:nowrap;
+    display:flex; align-items:baseline; gap:8px;
+  }
+  .brand small{
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+    font-weight:500; font-size:.78rem; color:var(--ink-soft);
+  }
+  .search-wrap{
+    flex:1 1 260px; position:relative; min-width:220px;
+  }
+  .search-wrap input{
+    width:100%; padding:11px 44px 11px 16px; border-radius:10px;
+    border:1px solid var(--line); background:var(--card);
+    color:var(--ink); font-size:.95rem; outline:none;
+    transition:border-color .15s ease;
+  }
+  .search-wrap input:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  .search-wrap svg{
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    width:18px; height:18px; color:var(--ink-soft); pointer-events:none;
+  }
+
+  .chips-row{
+    max-width:1180px; margin:14px auto 0;
+    display:flex; gap:8px; overflow-x:auto; padding-bottom:4px;
+    scrollbar-width:thin;
+  }
+  .chip{
+    flex:0 0 auto;
+    display:flex; align-items:center; gap:7px;
+    padding:8px 16px; border-radius:999px; border:1px solid var(--line);
+    background:var(--chip-bg); color:var(--ink);
+    font-weight:600; font-size:.86rem; cursor:pointer;
+    white-space:nowrap;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .chip:hover{ border-color:var(--accent); }
+  .chip:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .chip.active{
+    background:var(--chip-active-bg); color:var(--chip-active-ink);
+    border-color:var(--chip-active-bg);
+  }
+  .chip .n{
+    opacity:.75; font-family:'IBM Plex Sans Arabic', sans-serif; font-weight:500;
+    font-size:.8rem;
+  }
+
+  main{ max-width:1180px; margin:0 auto; padding:22px 20px 60px; }
+
+  .status-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px; color:var(--ink-soft); font-size:.9rem;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px, 1fr));
+    gap:14px;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+    display:flex; flex-direction:column; gap:12px;
+    min-height:150px;
+  }
+  .card:hover{ background:var(--card-hover); }
+
+  .card-top{ display:flex; align-items:flex-start; gap:10px; }
+
+  .cat-icon{
+    flex:0 0 auto; width:34px; height:34px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    background:color-mix(in srgb, var(--accent-2) 22%, transparent);
+    color:var(--accent-2);
+  }
+  .cat-icon svg{ width:18px; height:18px; }
+
+  .cat-tag{
+    font-size:.72rem; font-weight:600; color:var(--ink-soft);
+  }
+
+  .card-name{
+    font-size:.92rem; line-height:1.55; font-weight:500;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+    overflow:hidden; flex:1;
+  }
+
+  .card-action{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:8px; margin-top:auto;
+    padding-top:10px; border-top:1px dashed var(--line);
+  }
+  .open-link{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:.84rem; font-weight:600; color:var(--accent);
+    text-decoration:none;
+  }
+  .open-link svg{ width:14px; height:14px; }
+  .open-link:hover{ text-decoration:underline; }
+  .open-link:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; border-radius:4px; }
+
+  .copy-btn{
+    border:1px solid var(--line); background:transparent; color:var(--ink-soft);
+    border-radius:8px; padding:6px 8px; cursor:pointer; display:flex; align-items:center;
+  }
+  .copy-btn svg{ width:14px; height:14px; }
+  .copy-btn:hover{ color:var(--ink); border-color:var(--accent); }
+  .copy-btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+
+  .empty{
+    text-align:center; padding:70px 20px; color:var(--ink-soft);
+  }
+  .empty h2{ color:var(--ink); font-size:1.15rem; margin-bottom:6px; }
+
+  .loading{
+    text-align:center; padding:70px 20px; color:var(--ink-soft);
+  }
+
+  .load-error{
+    text-align:center; padding:60px 20px; color:var(--ink-soft);
+    border:1px dashed var(--line); border-radius:14px;
+  }
+  .load-error h2{ color:var(--accent); font-size:1.1rem; margin-bottom:8px; }
+  .load-error code{
+    background:var(--chip-bg); padding:2px 8px; border-radius:6px;
+    font-family:monospace; direction:ltr; display:inline-block;
+  }
+
+  .load-more-wrap{ display:flex; justify-content:center; margin-top:26px; }
+  .load-more{
+    background:var(--accent); color:var(--accent-ink); border:none;
+    padding:12px 28px; border-radius:10px; font-weight:700; font-size:.92rem;
+    cursor:pointer;
+  }
+  .load-more:hover{ opacity:.92; }
+  .load-more:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .load-more[disabled]{ opacity:.4; cursor:default; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+
+  ::-webkit-scrollbar{ height:6px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line); border-radius:99px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">دفتر المنتجات <small id="totalCount"></small></div>
+    <div class="search-wrap">
+      <input id="searchInput" type="text" placeholder="ابحث باسم المنتج..." disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+  </div>
+  <div class="chips-row" id="chipsRow"></div>
+</div>
+
+<main>
+  <div class="status-row">
+    <span id="statusText"></span>
+  </div>
+  <div class="loading" id="loadingState">
+    <p>جاري تحميل المنتجات...</p>
+  </div>
+  <div class="load-error" id="errorState" style="display:none">
+    <h2>تعذّر تحميل بيانات المنتجات</h2>
+    <p>تأكد أن ملف <code>products.json</code> موجود في نفس المجلد الذي يوجد فيه هذا الملف، ثم أعد تحميل الصفحة.</p>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="emptyState" style="display:none">
+    <h2>ما فيه نتائج مطابقة</h2>
+    <p>جرّب كلمة بحث ثانية أو اختر فئة مختلفة.</p>
+  </div>
+  <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+    <button class="load-more" id="loadMoreBtn">عرض المزيد</button>
+  </div>
+</main>
+
+<script>
+const CATEGORY_ORDER = ['العناية الشخصية والجمال','الأحذية','الملابس والإكسسوارات','الأغذية والمشروبات','الأجهزة المنزلية','أخرى'];
+
+const CARE_KW = ['شامبو','معجون اسنان','معجون أسنان','سنسوداين','كولجيت','بارادونتاكس','بارودونت',
+  'سيجنال','كريست','اورال بي','بيبسودنت','مارفيس','كورابروكس','استحمام','غسول',
+  'شاور','جل استحمام','بشرة','مرطب','لوشن','عطر','مزيل عرق','صابون بشرة',
+  'فرشاة اسنان','فرشاة أسنان','مسواك','مكياج','احمر شفاه','مسكرة','كريم للوجه',
+  'كريم يدين','بلسم','مبيض اسنان','مبيض أسنان','غسول فم','ديودرانت','هيسمايل',
+  'باراشوت','بيوريبير','اوجيإكس','ماكسمانا','اكوافريش','دايناسوفت','ليسترين','ليستيرين',
+  'فوط صحية','ساليسيليك','باديوايز'];
+
+const SHOE_KW = ['نيو بالانس','نيو بلانس','اسيكس','اندر ارمور','اندر آرمور','حذاء','بوت ','صندل','شبشب',
+  'اون كلاود','كلاود مونستر','كلاودرنر','كلاودسويفت','كلودريفت','كلاودروك','كلاود فلاير',
+  'كلاود سويفت','كلاود5','كلاود اواي','كلاودسيرفر','من اون','Shoes','Sneaker','GEL-',
+  'Fresh Foam','Cloudsurfer','Running Shoe'];
+
+const CLOTHES_KW = ['جاك اند جونز','جاك آند جونز','تومي هيل','تومي جينز','Tommy','قميص','تيشيرت','تي شيرت','تيشرت',
+  'بلوزة','بنطلون','شورت','جينز','نظارة شمس','قبعة','حزام','فانلة','سروال',
+  'حقيبة','حقائب سفر','شنط سفر','شنطة'];
+
+const FOOD_KW = ['أرز','ارز','حليب','لبن','زبادي','لبنة','جبنة','جبن','بسكويت','شوكولاتة','شوكولا',
+  'شاي','قهوة','عصير','مياه','شروب','معجون طماطم','طماطم','صلصة','صلصه','كاتشب',
+  'توابل','بهارات','مكسرات','عسل','تمر','زيت الزيتون','زيت ','سكر','دقيق','خبز',
+  'ويفر','كوكيز','ايس كريم','وجبة خفيفة','رقائق','سميد','هيل ','كمون','زعتر',
+  'مربى','ساندويتش','كفير','فلفل','قرفة','دارسين','زعفران','بابونج','نعناع شاي',
+  'مايونيز','بيض ','تفاح','حمص','سمسم','بذور','شوفان','زبيب','بطاطس','كب كيك',
+  'معمول','بقدونس','زبدة','كزبرة','معجنات','كراميل','كراكرز','ايسكريم'];
+
+const APPLIANCE_KW = ['جهاز','مكواة','غسالة','ثلاجة','مكنسة','خلاط','سخان','مروحة','كهربائي','سونيكير','مجفف','شاحن بطارية'];
+
+function categorize(name){
+  for(const kw of CARE_KW){ if(name.includes(kw)) return 'العناية الشخصية والجمال'; }
+  if(name.includes('شعر') && (name.includes('بلسم')||name.includes('زيت')||name.includes('كيراتين')||name.includes('تساقط')||name.includes('تنعيم')||name.includes('تجعيد')||name.includes('قشرة')||name.includes('لمعان'))){
+    return 'العناية الشخصية والجمال';
+  }
+  for(const kw of SHOE_KW){ if(name.includes(kw)) return 'الأحذية'; }
+  for(const kw of CLOTHES_KW){ if(name.includes(kw)) return 'الملابس والإكسسوارات'; }
+  for(const kw of FOOD_KW){ if(name.includes(kw)) return 'الأغذية والمشروبات'; }
+  for(const kw of APPLIANCE_KW){ if(name.includes(kw)) return 'الأجهزة المنزلية'; }
+  return 'أخرى';
+}
+
+const ICONS = {
+  'العناية الشخصية والجمال': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6v3l1.5 2v11a1.5 1.5 0 0 1-1.5 1.5h-6A1.5 1.5 0 0 1 7.5 19V8L9 6V3z"/><line x1="7.5" y1="11" x2="16.5" y2="11"/></svg>',
+  'الأحذية': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17c0-2 1-3 2.5-3.5L11 11l3-3c1-1 2-1 3 0l3 3c1 1 1.5 2.5 1.5 4v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-1.5z"/><path d="M8 13.5V17"/></svg>',
+  'الملابس والإكسسوارات': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4 4 7l2 3 2-1v11h8V9l2 1 2-3-4-3-2 2h-4L8 4z"/></svg>',
+  'الأغذية والمشروبات': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3v7a3 3 0 0 0 6 0V3"/><line x1="9" y1="10" x2="9" y2="21"/><path d="M17 3c-1.5 1.5-2 3-2 5s1 3 2 3v10"/></svg>',
+  'الأجهزة المنزلية': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="4" y1="8" x2="20" y2="8"/><circle cx="8" cy="14" r="1.5"/><circle cx="13" cy="14" r="1.5"/></svg>',
+  'أخرى': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>'
+};
+
+const OPEN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>';
+const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>';
+
+let PRODUCTS = [];
+let activeCategory = 'الكل';
+let query = '';
+let visibleCount = 60;
+const PAGE_SIZE = 60;
+
+function categoryCounts(){
+  const counts = {};
+  for(const p of PRODUCTS){ counts[p.category] = (counts[p.category]||0) + 1; }
+  return counts;
+}
+
+function renderChips(){
+  const counts = categoryCounts();
+  const chipsRow = document.getElementById('chipsRow');
+  const cats = ['الكل', ...CATEGORY_ORDER];
+  chipsRow.innerHTML = cats.map(c => {
+    const n = c === 'الكل' ? PRODUCTS.length : (counts[c] || 0);
+    const active = c === activeCategory ? 'active' : '';
+    return `<button class="chip ${active}" data-cat="${c}">${c} <span class="n">${n}</span></button>`;
+  }).join('');
+  chipsRow.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      visibleCount = PAGE_SIZE;
+      renderChips();
+      renderGrid();
+    });
+  });
+}
+
+function getFiltered(){
+  let list = PRODUCTS;
+  if(activeCategory !== 'الكل'){
+    list = list.filter(p => p.category === activeCategory);
+  }
+  if(query.trim()){
+    const q = query.trim();
+    list = list.filter(p => p.name.includes(q));
+  }
+  return list;
+}
+
+function escapeHtml(s){
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+function renderGrid(){
+  const filtered = getFiltered();
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('emptyState');
+  const statusText = document.getElementById('statusText');
+  const loadMoreWrap = document.getElementById('loadMoreWrap');
+
+  statusText.textContent = filtered.length ? `عدد النتائج: ${filtered.length.toLocaleString('ar')}` : '';
+
+  if(filtered.length === 0){
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    loadMoreWrap.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const slice = filtered.slice(0, visibleCount);
+  grid.innerHTML = slice.map((p) => {
+    const icon = ICONS[p.category] || ICONS['أخرى'];
+    return `
+    <article class="card">
+      <div class="card-top">
+        <div class="cat-icon">${icon}</div>
+        <div>
+          <div class="cat-tag">${p.category}</div>
+        </div>
+      </div>
+      <div class="card-name">${escapeHtml(p.name)}</div>
+      <div class="card-action">
+        <a class="open-link" href="${p.url}" target="_blank" rel="noopener noreferrer">فتح في أمازون ${OPEN_ICON}</a>
+        <button class="copy-btn" data-url="${p.url}" title="نسخ الرابط">${COPY_ICON}</button>
+      </div>
+    </article>`;
+  }).join('');
+
+  grid.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const url = btn.dataset.url;
+      try{
+        await navigator.clipboard.writeText(url);
+        const original = btn.innerHTML;
+        btn.innerHTML = CHECK_ICON;
+        setTimeout(() => { btn.innerHTML = original; }, 1200);
+      }catch(e){}
+    });
+  });
+
+  loadMoreWrap.style.display = filtered.length > visibleCount ? 'flex' : 'none';
+}
+
+let searchTimer;
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    query = e.target.value;
+    visibleCount = PAGE_SIZE;
+    renderGrid();
+  }, 150);
+});
+
+document.getElementById('loadMoreBtn').addEventListener('click', () => {
+  visibleCount += PAGE_SIZE;
+  renderGrid();
+});
+
+async function init(){
+  const loadingState = document.getElementById('loadingState');
+  const errorState = document.getElementById('errorState');
+  try{
+    const res = await fetch('./products.json');
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const raw = await res.json();
+    PRODUCTS = raw.map(p => ({
+      name: p.name,
+      url: p.url,
+      category: categorize(p.name || '')
+    }));
+    loadingState.style.display = 'none';
+    document.getElementById('searchInput').disabled = false;
+    document.getElementById('totalCount').textContent = PRODUCTS.length.toLocaleString('ar') + ' منتج';
+    renderChips();
+    renderGrid();
+  }catch(err){
+    loadingState.style.display = 'none';
+    errorState.style.display = 'block';
+    console.error(err);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
