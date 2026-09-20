@@ -9,6 +9,12 @@ on:
 permissions:
   contents: write
 
+# يمنع تشغيل نسختين من هذا الـ workflow بنفس الوقت (مثلاً تشغيل مجدول
+# يتزامن مع تشغيل يدوي) -- التشغيل الثاني ينتظر بدل ما يتعارض مع الأول.
+concurrency:
+  group: price-check
+  cancel-in-progress: false
+
 jobs:
   check-prices:
     runs-on: ubuntu-latest
@@ -35,5 +41,21 @@ jobs:
           git config user.name "price-bot"
           git config user.email "price-bot@users.noreply.github.com"
           git add prices_history.json
-          git diff --staged --quiet || git commit -m "تحديث سجل الأسعار"
-          git push
+
+          # لو ما فيه تغيير فعلي، ما فيه داعي نكمل
+          if git diff --staged --quiet; then
+            echo "لا يوجد تغيير في سجل الأسعار."
+            exit 0
+          fi
+
+          git commit -m "تحديث سجل الأسعار"
+
+          # نحاول نسحب آخر تحديثات الفرع (rebase) قبل الدفع، لأن أنت ممكن
+          # تكون رفعت products.json جديد بينما الفحص شغّال. لو فشل الدفع
+          # لأول مرة (تعارض)، نعيد المحاولة بعد سحب آخر تحديث.
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+            git push && break
+            echo "محاولة الدفع رقم $i فشلت، إعادة المحاولة..."
+            sleep 5
+          done
