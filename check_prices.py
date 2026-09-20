@@ -4,11 +4,19 @@
 الفكرة:
 - يقرأ قائمة المنتجات من products.json
 - يفتح كل رابط ويحاول يستخرج السعر الحالي وصورة المنتج من صفحة أمازون
-- يقارن السعر بالسعر المحفوظ من آخر مرة (في prices_history.json)
-- لو السعر اتغيّر (خصوصًا لو نزل) يبعت رسالة على تيليجرام مع صورة المنتج
+- يقارن السعر بالسعر المحفوظ من آخر مرة (في prices_history.json)، بالاعتماد
+  على رقم المنتج (ASIN) وليس الرابط الكامل -- لأن الرابط ممكن يتغيّر شكله
+  (مع/بدون tag، مع/بدون باراميترات) لنفس المنتج بالضبط.
+- منتج جديد (ASIN غير موجود بالتاريخ): يُسجَّل السعر كخط أساس بصمت، بدون أي
+  رسالة تيليجرام.
+- منتج معروف: يُرسل إشعار فقط لو السعر تغيّر فعليًا (طلع أو نزل).
 - يحدّث prices_history.json بالسعر الجديد
 
 يشتغل عادة عن طريق GitHub Actions على جدول زمني (مثلاً كل 6 ساعات).
+
+⚠️ مهم: الـ workflow (GitHub Actions) لازم يسوي commit + push لملف
+prices_history.json بعد كل تشغيلة، وإلا التاريخ يضيع وترجع نفس المشكلة
+القديمة (يعيد "بدأت المتابعة" من جديد كل مرة).
 """
 
 import json
@@ -59,6 +67,13 @@ IMAGE_SELECTORS = [
 ]
 
 
+def extract_asin(url: str):
+    """يستخرج رقم المنتج (ASIN) من الرابط. هذا هو المفتاح الثابت للمنتج
+    بغض النظر عن شكل الرابط (مع/بدون tag أو باراميترات إضافية)."""
+    m = re.search(r"/dp/([A-Z0-9]{10})", url or "")
+    return m.group(1) if m else None
+
+
 def load_json(path: Path, default):
     if path.exists():
         try:
@@ -73,6 +88,26 @@ def save_json(path: Path, data):
         json.dumps(data, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+
+def migrate_history_to_asin_keys(history: dict) -> dict:
+    """يهاجر أي مدخلات قديمة كانت مفتاحها الرابط الكامل (بدل ASIN) إلى
+    مفاتيح ASIN، بحيث ما نخسر تاريخ الأسعار المتراكم من قبل."""
+    migrated = {}
+    changed = False
+    for key, value in history.items():
+        asin = extract_asin(key) if key.startswith("http") else key
+        if asin:
+            if asin != key:
+                changed = True
+            # لو فيه أكثر من مدخل قديم لنفس الـ ASIN، نحتفظ بأحدث قيمة موجودة
+            migrated[asin] = value
+        else:
+            # مفتاح غريب ما قدرنا نستخرج منه ASIN، نتجاهله بأمان
+            changed = True
+    if changed:
+        print("تم ترحيل prices_history.json إلى مفاتيح ASIN.")
+    return migrated
 
 
 def extract_price(html: str):
@@ -195,13 +230,17 @@ def send_telegram_message(text: str, image_url: str = None):
 
 def main():
     products = load_json(PRODUCTS_FILE, [])
-    history = load_json(HISTORY_FILE, {})
+    raw_history = load_json(HISTORY_FILE, {})
+    history = migrate_history_to_asin_keys(raw_history)
 
     if not products:
         print("لا توجد منتجات في products.json")
         return
 
-    any_update = False
+    new_count = 0
+    changed_count = 0
+    unchanged_count = 0
+    skipped_count = 0
 
     for product in products:
         name = product.get("name", "منتج بدون اسم")
@@ -209,23 +248,27 @@ def main():
         if not url:
             continue
 
+        asin = extract_asin(url)
+        if not asin:
+            print(f"[{name}] تخطي: ما قدرت أستخرج ASIN من الرابط {url}")
+            skipped_count += 1
+            continue
+
         price, image_url, error = fetch_product_details(url)
         time.sleep(15)  # فاصل 15 ثانية بين الطلبات عشان منضغطش على أمازون بدون ما ياخذ وقت طويل جدًا
 
         if error:
             print(f"[{name}] {error}")
+            skipped_count += 1
             continue
 
-        old_price = history.get(url, {}).get("price")
+        old_price = history.get(asin, {}).get("price")
         message = None
 
         if old_price is None:
-            message = (
-                f"🆕 <b>{name}</b>\n"
-                f"بدأت متابعة السعر: {price:.2f} ر.س\n"
-                f"{url}\n\n"
-                f"{AFFILIATE_DISCLOSURE}"
-            )
+            # منتج جديد كليًا (أول مرة نشوف هذا الـ ASIN): نسجّل السعر
+            # كخط أساس بصمت، بدون أي إشعار تيليجرام.
+            new_count += 1
         elif price < old_price:
             diff = old_price - price
             pct = (diff / old_price) * 100
@@ -236,6 +279,7 @@ def main():
                 f"{url}\n\n"
                 f"{AFFILIATE_DISCLOSURE}"
             )
+            changed_count += 1
         elif price > old_price:
             message = (
                 f"🔺 <b>{name}</b>\n"
@@ -243,20 +287,23 @@ def main():
                 f"{url}\n\n"
                 f"{AFFILIATE_DISCLOSURE}"
             )
+            changed_count += 1
+        else:
+            unchanged_count += 1
         # لو السعر زي ما هو، منبعتش رسالة
 
         if message:
             send_telegram_message(message, image_url=image_url)
-            any_update = True
 
-        history[url] = {"name": name, "price": price}
+        history[asin] = {"name": name, "url": url, "price": price}
 
     save_json(HISTORY_FILE, history)
 
-    if any_update:
-        print("تم إرسال التحديثات.")
-    else:
-        print("لا توجد تغييرات في الأسعار هذه المرة.")
+    print(
+        f"تم: منتجات جديدة (بدون إشعار)={new_count}، "
+        f"أسعار تغيّرت (تم الإشعار)={changed_count}، "
+        f"بدون تغيير={unchanged_count}، تم تخطيها={skipped_count}"
+    )
 
 
 if __name__ == "__main__":
