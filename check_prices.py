@@ -4,19 +4,31 @@
 الفكرة:
 - يقرأ قائمة المنتجات من products.json
 - يفتح كل رابط ويحاول يستخرج السعر الحالي وصورة المنتج من صفحة أمازون
-- يقارن السعر بالسعر المحفوظ من آخر مرة (في prices_history.json)، بالاعتماد
-  على رقم المنتج (ASIN) وليس الرابط الكامل -- لأن الرابط ممكن يتغيّر شكله
-  (مع/بدون tag، مع/بدون باراميترات) لنفس المنتج بالضبط.
+- يقارن السعر بالسعر المحفوظ من آخر مرة، بالاعتماد على رقم المنتج (ASIN)
+  وليس الرابط الكامل -- لأن الرابط ممكن يتغيّر شكله لنفس المنتج بالضبط.
 - منتج جديد (ASIN غير موجود بالتاريخ): يُسجَّل السعر كخط أساس بصمت، بدون أي
   رسالة تيليجرام.
 - منتج معروف: يُرسل إشعار فقط لو السعر تغيّر فعليًا (طلع أو نزل).
-- يحدّث prices_history.json بالسعر الجديد
 
-يشتغل عادة عن طريق GitHub Actions على جدول زمني (مثلاً كل 6 ساعات).
+--- نظام الدفعات (Batching) ---
+عشان قائمة منتجات كبيرة (آلاف المنتجات) ما تتجاوز الحد الأقصى لوقت تشغيل
+GitHub Actions (6 ساعات)، السكريبت يدعم تقسيم المنتجات لعدة دفعات تشتغل
+بالتوازي، كل دفعة لها متغيرين بيئة:
+
+  BATCH_INDEX : رقم الدفعة (يبدأ من 0)
+  BATCH_COUNT : العدد الكلي للدفعات
+
+كل دفعة تاخذ فقط المنتجات اللي رقمها (index % BATCH_COUNT == BATCH_INDEX)،
+بحيث توزيع المنتجات متساوي تقريبًا بين كل الدفعات، وكل دفعة لها ملف تاريخ
+أسعار خاص فيها (prices_history_batchN.json) عشان ما يصير تعارض (Conflict)
+لما أكثر من دفعة تحاول تحفظ نفس الملف بنفس الوقت.
+
+لو ما تم ضبط BATCH_COUNT (أو كانت قيمته 1)، السكريبت يشتغل عادي على كل
+المنتجات بملف تاريخ واحد (prices_history.json) -- يعني التوافق للخلف
+محفوظ ولو حبيت ترجع تشغيل بدون تقسيم.
 
 ⚠️ مهم: الـ workflow (GitHub Actions) لازم يسوي commit + push لملف
-prices_history.json بعد كل تشغيلة، وإلا التاريخ يضيع وترجع نفس المشكلة
-القديمة (يعيد "بدأت المتابعة" من جديد كل مرة).
+(ات) prices_history بعد كل تشغيلة، وإلا التاريخ يضيع.
 """
 
 import json
@@ -30,7 +42,19 @@ import requests
 from bs4 import BeautifulSoup
 
 PRODUCTS_FILE = Path("products.json")
-HISTORY_FILE = Path("prices_history.json")
+
+# --- إعدادات الدفعات ---
+BATCH_INDEX = int(os.environ.get("BATCH_INDEX", "0"))
+BATCH_COUNT = int(os.environ.get("BATCH_COUNT", "1"))
+
+if BATCH_COUNT > 1:
+    HISTORY_FILE = Path(f"prices_history_batch{BATCH_INDEX}.json")
+else:
+    HISTORY_FILE = Path("prices_history.json")
+
+# كل كم منتج نحفظ التاريخ على القرص أثناء التشغيل (حماية إضافية لو صار
+# أي انقطاع غير متوقع في نص الطريق)
+SAVE_EVERY = 20
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
@@ -100,10 +124,8 @@ def migrate_history_to_asin_keys(history: dict) -> dict:
         if asin:
             if asin != key:
                 changed = True
-            # لو فيه أكثر من مدخل قديم لنفس الـ ASIN، نحتفظ بأحدث قيمة موجودة
             migrated[asin] = value
         else:
-            # مفتاح غريب ما قدرنا نستخرج منه ASIN، نتجاهله بأمان
             changed = True
     if changed:
         print("تم ترحيل prices_history.json إلى مفاتيح ASIN.")
@@ -123,7 +145,6 @@ def extract_price(html: str):
             if price is not None:
                 return price
 
-    # محاولة أخيرة: دور على أي نص فيه "ر.س" أو "SAR" جنب رقم
     match = re.search(r"([\d.,]+)\s*(?:ر\.?س|SAR)", html)
     if match:
         return clean_price(match.group(1))
@@ -142,8 +163,6 @@ def extract_image(html: str):
         if not tag:
             continue
 
-        # أمازون أحيانًا يخزن الصورة عالية الدقة في data-old-hires
-        # أو داخل خاصية data-a-dynamic-image (JSON فيه عدة أحجام)
         img_url = tag.get("data-old-hires") or tag.get("src")
 
         if not img_url:
@@ -205,7 +224,7 @@ def send_telegram_message(text: str, image_url: str = None):
         payload = {
             "chat_id": TELEGRAM_CHAT_ID,
             "photo": image_url,
-            "caption": text[:1024],  # تيليجرام يحدد الكابشن بـ 1024 حرف
+            "caption": text[:1024],
             "parse_mode": "HTML",
         }
     else:
@@ -220,12 +239,19 @@ def send_telegram_message(text: str, image_url: str = None):
     try:
         resp = requests.post(api_url, data=payload, timeout=15)
         if resp.status_code != 200 and image_url:
-            # لو فشل إرسال الصورة (مثلاً رابط الصورة منتهي أو غير صالح لتيليجرام)
-            # نرسل كنص عادي بدل ما نخسر التنبيه بالكامل
             print(f"فشل إرسال الصورة (كود {resp.status_code})، سيتم الإرسال كنص.")
             send_telegram_message(text, image_url=None)
     except requests.RequestException as exc:
         print(f"فشل إرسال رسالة تيليجرام: {exc}")
+
+
+def select_batch(products: list) -> list:
+    """يرجع فقط المنتجات اللي تخص هذه الدفعة (توزيع متساوي عبر الدفعات
+    بدل تقسيم متتالٍ، عشان لو فيه فئات منتجات مرتبة ورا بعض بالملف،
+    كل دفعة توخذ خليط متنوع منها مو فئة وحدة بس)."""
+    if BATCH_COUNT <= 1:
+        return products
+    return [p for i, p in enumerate(products) if i % BATCH_COUNT == BATCH_INDEX]
 
 
 def main():
@@ -237,12 +263,20 @@ def main():
         print("لا توجد منتجات في products.json")
         return
 
+    batch_products = select_batch(products)
+
+    if BATCH_COUNT > 1:
+        print(
+            f"دفعة {BATCH_INDEX + 1}/{BATCH_COUNT}: "
+            f"{len(batch_products)} منتج من إجمالي {len(products)}"
+        )
+
     new_count = 0
     changed_count = 0
     unchanged_count = 0
     skipped_count = 0
 
-    for product in products:
+    for idx, product in enumerate(batch_products, start=1):
         name = product.get("name", "منتج بدون اسم")
         url = product.get("url")
         if not url:
@@ -255,7 +289,7 @@ def main():
             continue
 
         price, image_url, error = fetch_product_details(url)
-        time.sleep(15)  # فاصل 15 ثانية بين الطلبات عشان منضغطش على أمازون بدون ما ياخذ وقت طويل جدًا
+        time.sleep(15)  # فاصل بين الطلبات عشان منضغطش على أمازون
 
         if error:
             print(f"[{name}] {error}")
@@ -266,8 +300,6 @@ def main():
         message = None
 
         if old_price is None:
-            # منتج جديد كليًا (أول مرة نشوف هذا الـ ASIN): نسجّل السعر
-            # كخط أساس بصمت، بدون أي إشعار تيليجرام.
             new_count += 1
         elif price < old_price:
             diff = old_price - price
@@ -290,12 +322,15 @@ def main():
             changed_count += 1
         else:
             unchanged_count += 1
-        # لو السعر زي ما هو، منبعتش رسالة
 
         if message:
             send_telegram_message(message, image_url=image_url)
 
         history[asin] = {"name": name, "url": url, "price": price}
+
+        # حفظ دوري: حماية إضافية لو صار انقطاع غير متوقع في نص الطريق
+        if idx % SAVE_EVERY == 0:
+            save_json(HISTORY_FILE, history)
 
     save_json(HISTORY_FILE, history)
 
