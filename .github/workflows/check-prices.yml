@@ -9,15 +9,25 @@ on:
 permissions:
   contents: write
 
-# يمنع تشغيل نسختين من هذا الـ workflow بنفس الوقت (مثلاً تشغيل مجدول
-# يتزامن مع تشغيل يدوي) -- التشغيل الثاني ينتظر بدل ما يتعارض مع الأول.
-concurrency:
-  group: price-check
-  cancel-in-progress: false
-
 jobs:
   check-prices:
     runs-on: ubuntu-latest
+    strategy:
+      # 6 دفعات تشتغل بالتوازي، كل دفعة تاخذ سدس المنتجات تقريبًا
+      # (2334 منتج / 6 ≈ 389 منتج لكل دفعة ≈ 97 دقيقة تشغيل -- هامش أمان
+      # كبير عن حد الـ 6 ساعات المسموح به لكل Job).
+      # لو زاد عدد المنتجات كثير بالمستقبل، زود رقم هنا وفي BATCH_COUNT
+      # بالأسفل بنفس القيمة (مثلاً لو صار عندك 4000 منتج، خليها 10).
+      matrix:
+        batch: [0, 1, 2, 3, 4, 5]
+      fail-fast: false  # لو دفعة وحدة فشلت، الباقي يكمل عادي
+
+    # كل دفعة لها مجموعة تزامن مستقلة، عشان الدفعات تشتغل بالتوازي فعليًا
+    # (لو كل الدفعات بنفس المجموعة، بيصطفوا وراء بعض وترجع نفس مشكلة الوقت)
+    concurrency:
+      group: price-check-batch-${{ matrix.batch }}
+      cancel-in-progress: false
+
     steps:
       - name: تنزيل الكود
         uses: actions/checkout@v4
@@ -30,32 +40,34 @@ jobs:
       - name: تثبيت المكتبات
         run: pip install -r requirements.txt
 
-      - name: تشغيل فحص الأسعار
+      - name: تشغيل فحص الأسعار (دفعة ${{ matrix.batch }})
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          BATCH_INDEX: ${{ matrix.batch }}
+          BATCH_COUNT: 6
         run: python check_prices.py
 
-      - name: حفظ سجل الأسعار المحدث
+      - name: حفظ سجل الأسعار المحدث لهذه الدفعة
         run: |
           git config user.name "price-bot"
           git config user.email "price-bot@users.noreply.github.com"
-          git add prices_history.json
+          git add prices_history_batch${{ matrix.batch }}.json
 
           # لو ما فيه تغيير فعلي، ما فيه داعي نكمل
           if git diff --staged --quiet; then
-            echo "لا يوجد تغيير في سجل الأسعار."
+            echo "لا يوجد تغيير في سجل الأسعار لهذه الدفعة."
             exit 0
           fi
 
-          git commit -m "تحديث سجل الأسعار"
+          git commit -m "تحديث سجل الأسعار (دفعة ${{ matrix.batch }})"
 
-          # نحاول نسحب آخر تحديثات الفرع (rebase) قبل الدفع، لأن أنت ممكن
-          # تكون رفعت products.json جديد بينما الفحص شغّال. لو فشل الدفع
-          # لأول مرة (تعارض)، نعيد المحاولة بعد سحب آخر تحديث.
-          for i in 1 2 3; do
+          # كل دفعة تلمس ملف مختلف عن باقي الدفعات، فاحتمال التعارض
+          # ضعيف جدًا، لكن نحتفظ بإعادة المحاولة احتياطًا لو صار تزامن
+          # مع دفعة ثانية أو رفعة يدوية لـ products.json بنفس الوقت.
+          for i in 1 2 3 4 5; do
             git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
             git push && break
             echo "محاولة الدفع رقم $i فشلت، إعادة المحاولة..."
-            sleep 5
+            sleep $((RANDOM % 20 + 5))
           done
