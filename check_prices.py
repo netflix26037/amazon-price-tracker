@@ -1,99 +1,70 @@
 """
 بوت متابعة أسعار أمازون السعودية (amazon.sa) عبر تيليجرام.
 
-الفكرة:
-- يقرأ قائمة المنتجات من products.json
-- يفتح كل رابط ويحاول يستخرج السعر الحالي وصورة المنتج من صفحة أمازون
-- يقارن السعر بالسعر المحفوظ من آخر مرة، بالاعتماد على رقم المنتج (ASIN)
-  وليس الرابط الكامل -- لأن الرابط ممكن يتغيّر شكله لنفس المنتج بالضبط.
-- منتج جديد (ASIN غير موجود بالتاريخ): يُسجَّل السعر كخط أساس بصمت، بدون أي
-  رسالة تيليجرام.
-- منتج معروف: يُرسل إشعار فقط لو السعر تغيّر فعليًا (طلع أو نزل).
+--- التحديث: استخدام Amazon Creators API الرسمي بدل الـ Scraping ---
+بدل ما نفتح كل رابط منتج ونستخرج السعر يدويًا من HTML (بطيء، وعرضة لتغيّر
+تصميم الصفحة أو الحظر)، صرنا نستخدم واجهة أمازون الرسمية (Creators API،
+اللي حلّت محل Product Advertising API v5 القديم). هذي الواجهة ترجع لنا
+حتى 10 منتجات بطلب واحد، فبدل 2334 طلب صار عندنا ~234 طلب بس -- تشغيل
+كامل خلال دقائق قليلة بدل ساعات.
 
---- نظام الدفعات (Batching) ---
-عشان قائمة منتجات كبيرة (آلاف المنتجات) ما تتجاوز الحد الأقصى لوقت تشغيل
-GitHub Actions (6 ساعات)، السكريبت يدعم تقسيم المنتجات لعدة دفعات تشتغل
-بالتوازي، كل دفعة لها متغيرين بيئة:
+الفكرة نفس القديمة:
+- يقرأ قائمة المنتجات من products.json ويستخرج ASIN من كل رابط.
+- يجيب السعر الحالي لكل ASIN عبر Creators API على دفعات من 10.
+- يقارن بالسعر المحفوظ من آخر مرة (في prices_history.json) بالاعتماد على
+  ASIN، ويرسل إشعار تيليجرام فقط لو السعر تغيّر فعليًا.
+- منتج جديد (أول مرة نشوفه): يُسجَّل كخط أساس بصمت، بدون إشعار.
 
-  BATCH_INDEX : رقم الدفعة (يبدأ من 0)
-  BATCH_COUNT : العدد الكلي للدفعات
+المتطلبات (أضفها لـ requirements.txt):
+    python-amazon-paapi
+    requests
 
-كل دفعة تاخذ فقط المنتجات اللي رقمها (index % BATCH_COUNT == BATCH_INDEX)،
-بحيث توزيع المنتجات متساوي تقريبًا بين كل الدفعات، وكل دفعة لها ملف تاريخ
-أسعار خاص فيها (prices_history_batchN.json) عشان ما يصير تعارض (Conflict)
-لما أكثر من دفعة تحاول تحفظ نفس الملف بنفس الوقت.
+متغيرات البيئة المطلوبة (GitHub Secrets):
+    AMAZON_CLIENT_ID       -- معرف بيانات الاعتماد من Creators API
+    AMAZON_CLIENT_SECRET   -- السر من Creators API
+    TELEGRAM_BOT_TOKEN
+    TELEGRAM_CHAT_ID
 
-لو ما تم ضبط BATCH_COUNT (أو كانت قيمته 1)، السكريبت يشتغل عادي على كل
-المنتجات بملف تاريخ واحد (prices_history.json) -- يعني التوافق للخلف
-محفوظ ولو حبيت ترجع تشغيل بدون تقسيم.
-
-⚠️ مهم: الـ workflow (GitHub Actions) لازم يسوي commit + push لملف
-(ات) prices_history بعد كل تشغيلة، وإلا التاريخ يضيع.
+⚠️ مهم: الـ workflow لازم يسوي commit + push لملف prices_history.json
+بعد كل تشغيلة، وإلا التاريخ يضيع.
 """
 
 import json
 import os
 import re
 import sys
-import time
 from pathlib import Path
 
 import requests
-from bs4 import BeautifulSoup
+from amazon_creatorsapi import AmazonCreatorsApi, Country
 
 PRODUCTS_FILE = Path("products.json")
+HISTORY_FILE = Path("prices_history.json")
 
-# --- إعدادات الدفعات ---
-BATCH_INDEX = int(os.environ.get("BATCH_INDEX", "0"))
-BATCH_COUNT = int(os.environ.get("BATCH_COUNT", "1"))
+# كل كم "دفعة" (مو منتج) نحفظ التاريخ على القرص أثناء التشغيل -- حماية
+# إضافية لو صار انقطاع غير متوقع في نص الطريق
+SAVE_EVERY_BATCHES = 5
 
-if BATCH_COUNT > 1:
-    HISTORY_FILE = Path(f"prices_history_batch{BATCH_INDEX}.json")
-else:
-    HISTORY_FILE = Path("prices_history.json")
-
-# كل كم منتج نحفظ التاريخ على القرص أثناء التشغيل (حماية إضافية لو صار
-# أي انقطاع غير متوقع في نص الطريق)
-SAVE_EVERY = 20
+# الحد الأقصى لعدد المنتجات بالطلب الواحد لـ Creators API
+BATCH_SIZE = 10
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
+AMAZON_CLIENT_ID = os.environ.get("AMAZON_CLIENT_ID")
+AMAZON_CLIENT_SECRET = os.environ.get("AMAZON_CLIENT_SECRET")
+# الإصدار (Version) اللي تشوفه بجانب بيانات الاعتماد بصفحة Creators API
+# (مثلاً v3.2) -- عدّله لو تغيّر، أو مرّره كـ Secret باسم AMAZON_CREDENTIAL_VERSION
+AMAZON_CREDENTIAL_VERSION = os.environ.get("AMAZON_CREDENTIAL_VERSION", "3.2")
+# رمز الشريك التسويقي (Partner Tag) الظاهر بروابطك الحالية
+AMAZON_PARTNER_TAG = os.environ.get("AMAZON_PARTNER_TAG", "mohammedala02-21")
+
 # إفصاح إلزامي حسب اتفاقية تشغيل برنامج أمازون أسوشييتس.
-# يُضاف تلقائيًا في نهاية كل رسالة تحتوي على رابط منتج.
 AFFILIATE_DISCLOSURE = "📌 بصفتي شريك أمازون أسوشييتس، أكسب عمولة من المشتريات المؤهلة."
-
-# نتظاهر بأننا متصفح حقيقي عشان نقلل فرصة الحظر
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0.0.0 Safari/537.36"
-    ),
-    "Accept-Language": "ar-SA,ar;q=0.9,en-US;q=0.8,en;q=0.7",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-}
-
-# محاولات مختلفة لاستخراج السعر لأن أمازون بيغيّر شكل الصفحة أحيانًا
-PRICE_SELECTORS = [
-    {"id": "priceblock_ourprice"},
-    {"id": "priceblock_dealprice"},
-    {"id": "priceblock_saleprice"},
-    {"class_": "a-price-whole"},
-    {"class_": "a-offscreen"},
-]
-
-# محاولات مختلفة لاستخراج صورة المنتج
-IMAGE_SELECTORS = [
-    {"id": "landingImage"},
-    {"id": "imgBlkFront"},
-    {"class_": "a-dynamic-image"},
-]
 
 
 def extract_asin(url: str):
-    """يستخرج رقم المنتج (ASIN) من الرابط. هذا هو المفتاح الثابت للمنتج
-    بغض النظر عن شكل الرابط (مع/بدون tag أو باراميترات إضافية)."""
+    """يستخرج رقم المنتج (ASIN) من الرابط."""
     m = re.search(r"/dp/([A-Z0-9]{10})", url or "")
     return m.group(1) if m else None
 
@@ -115,8 +86,7 @@ def save_json(path: Path, data):
 
 
 def migrate_history_to_asin_keys(history: dict) -> dict:
-    """يهاجر أي مدخلات قديمة كانت مفتاحها الرابط الكامل (بدل ASIN) إلى
-    مفاتيح ASIN، بحيث ما نخسر تاريخ الأسعار المتراكم من قبل."""
+    """يهاجر أي مدخلات قديمة كانت مفتاحها الرابط الكامل إلى مفاتيح ASIN."""
     migrated = {}
     changed = False
     for key, value in history.items():
@@ -132,84 +102,20 @@ def migrate_history_to_asin_keys(history: dict) -> dict:
     return migrated
 
 
-def extract_price(html: str):
-    """يحاول يستخرج السعر من صفحة أمازون بأكثر من طريقة."""
-    soup = BeautifulSoup(html, "html.parser")
+def get_price_from_item(item):
+    """يرجع (السعر, رابط الصورة) من كائن المنتج اللي ترجعه الـ API،
+    أو (None, None) لو ما فيه عروض متاحة حاليًا (نفذت الكمية مثلًا)."""
+    price = None
+    if item.offers_v2 and item.offers_v2.listings:
+        listing = item.offers_v2.listings[0]
+        if listing.price and listing.price.money:
+            price = float(listing.price.money.amount)
 
-    for selector in PRICE_SELECTORS:
-        tag = soup.find(attrs=selector) if "class_" not in selector else soup.find(
-            class_=selector["class_"]
-        )
-        if tag and tag.text.strip():
-            price = clean_price(tag.text)
-            if price is not None:
-                return price
+    image_url = None
+    if item.images and item.images.primary and item.images.primary.large:
+        image_url = item.images.primary.large.url
 
-    match = re.search(r"([\d.,]+)\s*(?:ر\.?س|SAR)", html)
-    if match:
-        return clean_price(match.group(1))
-
-    return None
-
-
-def extract_image(html: str):
-    """يحاول يستخرج رابط صورة المنتج الرئيسية من صفحة أمازون."""
-    soup = BeautifulSoup(html, "html.parser")
-
-    for selector in IMAGE_SELECTORS:
-        tag = soup.find(attrs=selector) if "class_" not in selector else soup.find(
-            class_=selector["class_"]
-        )
-        if not tag:
-            continue
-
-        img_url = tag.get("data-old-hires") or tag.get("src")
-
-        if not img_url:
-            dynamic_data = tag.get("data-a-dynamic-image")
-            if dynamic_data:
-                try:
-                    images = json.loads(dynamic_data)
-                    if images:
-                        img_url = next(iter(images))
-                except (json.JSONDecodeError, StopIteration):
-                    img_url = None
-
-        if img_url and img_url.startswith("http"):
-            return img_url
-
-    return None
-
-
-def clean_price(text: str):
-    """يحوّل نص السعر (فيه فواصل/رموز) لرقم عشري."""
-    cleaned = re.sub(r"[^\d.,]", "", text)
-    cleaned = cleaned.replace(",", "")
-    if not cleaned:
-        return None
-    try:
-        return float(cleaned)
-    except ValueError:
-        return None
-
-
-def fetch_product_details(url: str):
-    """يرجع (السعر, رابط الصورة, رسالة خطأ)."""
-    try:
-        resp = requests.get(url, headers=HEADERS, timeout=20)
-    except requests.RequestException as exc:
-        return None, None, f"خطأ في الاتصال: {exc}"
-
-    if resp.status_code != 200:
-        return None, None, f"استجابة غير متوقعة من أمازون (كود {resp.status_code})"
-
-    price = extract_price(resp.text)
-    image_url = extract_image(resp.text)
-
-    if price is None:
-        return None, image_url, "لم أستطع إيجاد السعر في الصفحة (ربما تغيّر شكل الصفحة أو طُلب تحقق أمني)"
-
-    return price, image_url, None
+    return price, image_url
 
 
 def send_telegram_message(text: str, image_url: str = None):
@@ -245,16 +151,16 @@ def send_telegram_message(text: str, image_url: str = None):
         print(f"فشل إرسال رسالة تيليجرام: {exc}")
 
 
-def select_batch(products: list) -> list:
-    """يرجع فقط المنتجات اللي تخص هذه الدفعة (توزيع متساوي عبر الدفعات
-    بدل تقسيم متتالٍ، عشان لو فيه فئات منتجات مرتبة ورا بعض بالملف،
-    كل دفعة توخذ خليط متنوع منها مو فئة وحدة بس)."""
-    if BATCH_COUNT <= 1:
-        return products
-    return [p for i, p in enumerate(products) if i % BATCH_COUNT == BATCH_INDEX]
+def chunked(items, size):
+    for i in range(0, len(items), size):
+        yield items[i:i + size]
 
 
 def main():
+    if not AMAZON_CLIENT_ID or not AMAZON_CLIENT_SECRET:
+        print("خطأ: لازم تضبط AMAZON_CLIENT_ID و AMAZON_CLIENT_SECRET.")
+        sys.exit(1)
+
     products = load_json(PRODUCTS_FILE, [])
     raw_history = load_json(HISTORY_FILE, {})
     history = migrate_history_to_asin_keys(raw_history)
@@ -263,81 +169,109 @@ def main():
         print("لا توجد منتجات في products.json")
         return
 
-    batch_products = select_batch(products)
+    # نبني خريطة ASIN -> بيانات المنتج (الاسم والرابط) من ملفنا
+    asin_to_product = {}
+    skipped_count = 0
+    for product in products:
+        url = product.get("url")
+        asin = extract_asin(url) if url else None
+        if not asin:
+            skipped_count += 1
+            continue
+        asin_to_product[asin] = product  # لو فيه تكرار لنفس ASIN، ناخذ آخر واحد
 
-    if BATCH_COUNT > 1:
-        print(
-            f"دفعة {BATCH_INDEX + 1}/{BATCH_COUNT}: "
-            f"{len(batch_products)} منتج من إجمالي {len(products)}"
-        )
+    all_asins = list(asin_to_product.keys())
+    print(f"إجمالي منتجات صالحة: {len(all_asins)} (تم تخطي {skipped_count} بدون ASIN صالح)")
+
+    api = AmazonCreatorsApi(
+        credential_id=AMAZON_CLIENT_ID,
+        credential_secret=AMAZON_CLIENT_SECRET,
+        version=AMAZON_CREDENTIAL_VERSION,
+        tag=AMAZON_PARTNER_TAG,
+        country=Country.SA,
+        throttling=2,  # ثانيتين بين كل طلب دفعة، هامش أمان إضافي
+    )
 
     new_count = 0
     changed_count = 0
     unchanged_count = 0
-    skipped_count = 0
+    unavailable_count = 0
+    error_count = 0
 
-    for idx, product in enumerate(batch_products, start=1):
-        name = product.get("name", "منتج بدون اسم")
-        url = product.get("url")
-        if not url:
+    batches = list(chunked(all_asins, BATCH_SIZE))
+    print(f"سيتم التنفيذ على {len(batches)} دفعة (كل دفعة حتى {BATCH_SIZE} منتجات)")
+
+    for batch_idx, batch_asins in enumerate(batches, start=1):
+        try:
+            items = api.get_items(batch_asins)
+        except Exception as exc:  # نلتقط أي خطأ عام من المكتبة/الشبكة
+            print(f"دفعة {batch_idx}: فشل الطلب بالكامل: {exc}")
+            error_count += len(batch_asins)
             continue
 
-        asin = extract_asin(url)
-        if not asin:
-            print(f"[{name}] تخطي: ما قدرت أستخرج ASIN من الرابط {url}")
-            skipped_count += 1
-            continue
+        items_by_asin = {item.asin: item for item in items if getattr(item, "asin", None)}
 
-        price, image_url, error = fetch_product_details(url)
-        time.sleep(15)  # فاصل بين الطلبات عشان منضغطش على أمازون
+        for asin in batch_asins:
+            product = asin_to_product[asin]
+            name = product.get("name", "منتج بدون اسم")
+            url = product.get("url")
 
-        if error:
-            print(f"[{name}] {error}")
-            skipped_count += 1
-            continue
+            item = items_by_asin.get(asin)
+            if item is None:
+                print(f"[{name}] لم يُرجع أي بيانات لهذا الـ ASIN ({asin})")
+                error_count += 1
+                continue
 
-        old_price = history.get(asin, {}).get("price")
-        message = None
+            price, image_url = get_price_from_item(item)
 
-        if old_price is None:
-            new_count += 1
-        elif price < old_price:
-            diff = old_price - price
-            pct = (diff / old_price) * 100
-            message = (
-                f"🔻 <b>{name}</b>\n"
-                f"نزل السعر من {old_price:.2f} إلى {price:.2f} ر.س "
-                f"(خصم {pct:.0f}%)\n"
-                f"{url}\n\n"
-                f"{AFFILIATE_DISCLOSURE}"
-            )
-            changed_count += 1
-        elif price > old_price:
-            message = (
-                f"🔺 <b>{name}</b>\n"
-                f"ارتفع السعر من {old_price:.2f} إلى {price:.2f} ر.س\n"
-                f"{url}\n\n"
-                f"{AFFILIATE_DISCLOSURE}"
-            )
-            changed_count += 1
-        else:
-            unchanged_count += 1
+            if price is None:
+                print(f"[{name}] غير متوفر حاليًا (لا توجد عروض)")
+                unavailable_count += 1
+                continue
 
-        if message:
-            send_telegram_message(message, image_url=image_url)
+            old_price = history.get(asin, {}).get("price")
+            message = None
 
-        history[asin] = {"name": name, "url": url, "price": price}
+            if old_price is None:
+                new_count += 1
+            elif price < old_price:
+                diff = old_price - price
+                pct = (diff / old_price) * 100
+                message = (
+                    f"🔻 <b>{name}</b>\n"
+                    f"نزل السعر من {old_price:.2f} إلى {price:.2f} ر.س "
+                    f"(خصم {pct:.0f}%)\n"
+                    f"{url}\n\n"
+                    f"{AFFILIATE_DISCLOSURE}"
+                )
+                changed_count += 1
+            elif price > old_price:
+                message = (
+                    f"🔺 <b>{name}</b>\n"
+                    f"ارتفع السعر من {old_price:.2f} إلى {price:.2f} ر.س\n"
+                    f"{url}\n\n"
+                    f"{AFFILIATE_DISCLOSURE}"
+                )
+                changed_count += 1
+            else:
+                unchanged_count += 1
 
-        # حفظ دوري: حماية إضافية لو صار انقطاع غير متوقع في نص الطريق
-        if idx % SAVE_EVERY == 0:
+            if message:
+                send_telegram_message(message, image_url=image_url)
+
+            history[asin] = {"name": name, "url": url, "price": price}
+
+        if batch_idx % SAVE_EVERY_BATCHES == 0:
             save_json(HISTORY_FILE, history)
+            print(f"تم حفظ التقدم بعد الدفعة {batch_idx}/{len(batches)}")
 
     save_json(HISTORY_FILE, history)
 
     print(
         f"تم: منتجات جديدة (بدون إشعار)={new_count}، "
         f"أسعار تغيّرت (تم الإشعار)={changed_count}، "
-        f"بدون تغيير={unchanged_count}، تم تخطيها={skipped_count}"
+        f"بدون تغيير={unchanged_count}، غير متوفرة حاليًا={unavailable_count}، "
+        f"أخطاء={error_count}"
     )
 
 
