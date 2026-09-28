@@ -81,6 +81,20 @@ PRICE_SELECTORS = [
     {"class_": "a-offscreen"},
 ]
 
+# selectors إضافية (CSS) لأشكال صفحات المنتجات الحديثة -- تُجرَّب بعد
+# القديمة فقط
+EXTRA_PRICE_CSS = [
+    "#corePriceDisplay_desktop_feature_div .priceToPay .a-offscreen",
+    "#corePrice_feature_div .a-price .a-offscreen",
+    "#corePrice_desktop .a-price .a-offscreen",
+    "#apex_desktop .a-price .a-offscreen",
+    ".priceToPay .a-offscreen",
+    "#price_inside_buybox",
+    "#newBuyBoxPrice",
+    "#tp_price_block_total_price_ww .a-offscreen",
+    "span.a-price span.a-offscreen",
+]
+
 # محاولات مختلفة لاستخراج صورة المنتج
 IMAGE_SELECTORS = [
     {"id": "landingImage"},
@@ -143,7 +157,24 @@ def extract_price(html: str):
             if price is not None:
                 return price
 
-    match = re.search(r"([\d.,]+)\s*(?:ر\.?س|SAR)", html)
+    # محاولات إضافية (تُجرَّب فقط لو الـ selectors القديمة فشلت، عشان
+    # ما يتغيّر معنى الأسعار المحفوظة للمنتجات اللي كانت تشتغل أصلاً)
+    for css in EXTRA_PRICE_CSS:
+        tag = soup.select_one(css)
+        if tag and tag.text.strip():
+            price = clean_price(tag.text)
+            if price is not None:
+                return price
+
+    # في صفحات أمازون العربية العملة غالبًا قبل الرقم ("ر.س.‏ 12.50" أو
+    # "SAR 12.50")، فنجرب الترتيبين: رقم ثم عملة، أو عملة ثم رقم.
+    match = re.search(r"([\d][\d.,]*)\s*(?:ر\.?\s?س|SAR)", html)
+    if match:
+        price = clean_price(match.group(1))
+        if price is not None:
+            return price
+
+    match = re.search(r"(?:ر\.?\s?س\.?|SAR)[\s\u200e\u200f\xa0]*([\d][\d.,]*)", html)
     if match:
         return clean_price(match.group(1))
 
@@ -211,7 +242,19 @@ def fetch_product_details(url: str):
     image_url = extract_image(resp.text)
 
     if price is None:
-        return None, image_url, "لم أستطع إيجاد السعر في الصفحة (ربما تغيّر شكل الصفحة أو طُلب تحقق أمني)", final_url
+        # تشخيص: نطبع معلومات تساعد نعرف السبب (صفحة تحقق أمني ولا شكل صفحة مختلف)
+        soup = BeautifulSoup(resp.text, "html.parser")
+        title = soup.title.text.strip()[:80] if soup.title and soup.title.text else "بدون عنوان"
+        lowered = resp.text.lower()
+        is_captcha = any(
+            marker in lowered
+            for marker in ("captcha", "robot check", "api-services-support@amazon.com", "automated access")
+        )
+        diag = (
+            f"[تشخيص: عنوان الصفحة={title!r}، طول الصفحة={len(resp.text)}، "
+            f"تحقق_أمني={'نعم' if is_captcha else 'لا'}، الرابط النهائي={final_url}]"
+        )
+        return None, image_url, f"لم أستطع إيجاد السعر في الصفحة {diag}", final_url
 
     return price, image_url, None, final_url
 
