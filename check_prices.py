@@ -92,7 +92,7 @@ IMAGE_SELECTORS = [
 def extract_asin(url: str):
     """يستخرج رقم المنتج (ASIN) من الرابط. هذا هو المفتاح الثابت للمنتج
     بغض النظر عن شكل الرابط (مع/بدون tag أو باراميترات إضافية)."""
-    m = re.search(r"/dp/([A-Z0-9]{10})", url or "")
+    m = re.search(r"/(?:dp|gp/product)/([A-Z0-9]{10})", url or "")
     return m.group(1) if m else None
 
 
@@ -192,22 +192,28 @@ def clean_price(text: str):
 
 
 def fetch_product_details(url: str):
-    """يرجع (السعر, رابط الصورة, رسالة خطأ)."""
+    """يرجع (السعر, رابط الصورة, رسالة خطأ, الرابط النهائي بعد التحويل).
+
+    الرابط النهائي مهم للروابط المختصرة (amzn.eu/d/...): هذي ما فيها ASIN،
+    لكن لما نفتحها أمازون يحوّلنا لرابط المنتج الكامل (/dp/ASIN) ومنه
+    نستخرج الـ ASIN."""
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=20)
+        resp = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True)
     except requests.RequestException as exc:
-        return None, None, f"خطأ في الاتصال: {exc}"
+        return None, None, f"خطأ في الاتصال: {exc}", None
+
+    final_url = resp.url
 
     if resp.status_code != 200:
-        return None, None, f"استجابة غير متوقعة من أمازون (كود {resp.status_code})"
+        return None, None, f"استجابة غير متوقعة من أمازون (كود {resp.status_code})", final_url
 
     price = extract_price(resp.text)
     image_url = extract_image(resp.text)
 
     if price is None:
-        return None, image_url, "لم أستطع إيجاد السعر في الصفحة (ربما تغيّر شكل الصفحة أو طُلب تحقق أمني)"
+        return None, image_url, "لم أستطع إيجاد السعر في الصفحة (ربما تغيّر شكل الصفحة أو طُلب تحقق أمني)", final_url
 
-    return price, image_url, None
+    return price, image_url, None, final_url
 
 
 def send_telegram_message(text: str, image_url: str = None):
@@ -279,14 +285,19 @@ def main():
         if not url:
             continue
 
+        # الروابط العادية (/dp/ASIN) فيها الـ ASIN مباشرة. الروابط المختصرة
+        # (amzn.eu/d/...) ما فيها، فنستخرجه من الرابط النهائي بعد فتحها.
         asin = extract_asin(url)
+
+        price, image_url, error, final_url = fetch_product_details(url)
+        time.sleep(15)  # فاصل بين الطلبات عشان منضغطش على أمازون
+
         if not asin:
-            print(f"[{name}] تخطي: ما قدرت أستخرج ASIN من الرابط {url}")
+            asin = extract_asin(final_url)
+        if not asin:
+            print(f"[{name}] تخطي: ما قدرت أستخرج ASIN من الرابط {url} (الرابط النهائي: {final_url})")
             skipped_count += 1
             continue
-
-        price, image_url, error = fetch_product_details(url)
-        time.sleep(15)  # فاصل بين الطلبات عشان منضغطش على أمازون
 
         if error:
             print(f"[{name}] {error}")
