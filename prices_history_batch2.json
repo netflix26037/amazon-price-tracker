@@ -97,7 +97,7 @@
   "B0DGDKBF1N": {
     "name": "اون حذاء رياضي للرجال من كلاودرانر",
     "url": "https://www.amazon.sa/dp/B0DGDKBF1N",
-    "price": 1413.0
+    "price": 1385.0
   },
   "B0CN9514RV": {
     "name": "اون حذاء رياضي كلاودريفت 1 للرجال",
@@ -247,7 +247,7 @@
   "B0195YYNCM": {
     "name": "تومي هيليفيغر قميص رسمي للرجال بقصة عادية غير قابل للكي، ازرق، رقبة 16.5 انش واكمام 36-37 انش",
     "url": "https://www.amazon.sa/dp/B0195YYNCM",
-    "price": 369.0
+    "price": 387.0
   },
   "B0949BTLWN": {
     "name": "اوراق شاي كاملة من ابو جبل - 75 كيس",
@@ -425,8 +425,8 @@
     "price": 8.0
   },
   "B0016BC2BM": {
-    "name": "شامبو علاجي لتكثيف الشعر من افالون اورجانيكس، بيوتين بي كومبلكس، 392 مل",
-    "url": "https://amzn.eu/d/0fMisUJ9?tag=mohammedala02-21",
+    "name": "افالون اورجانيكس بيوتين كومبلكس لتكثيف الشعر",
+    "url": "https://www.amazon.sa/dp/B0016BC2BM?tag=mohammedala02-21",
     "price": 67.0
   },
   "B0DLX1FZS8": {
@@ -532,7 +532,7 @@
   "B0B5XHWN44": {
     "name": "قهوة نسكافيه جولد سريعة الذوبان، 95 جرام، بلاك، حبيبة",
     "url": "https://www.amazon.sa/dp/B0B5XHWN44?tag=mohammedala02-21",
-    "price": 24.0
+    "price": 19.0
   },
   "B0F8HJTWNB": {
     "name": "بهارات الكبسة من زينة، 200 جم",
@@ -697,7 +697,7 @@
   "B0GHZKS7LV": {
     "name": "نيو بلانس ترايل فريش فوم X 9H0",
     "url": "https://www.amazon.sa/dp/B0GHZKS7LV?tag=mohammedala02-21",
-    "price": 549.0
+    "price": 558.0
   },
   "B09VPN4Y7B": {
     "name": "نيو بلانس 22",
@@ -1097,7 +1097,7 @@
   "B00P1ZE9Q0": {
     "name": "هنس تي شيرت داخلي قطني للرجال من هنس ماص للرطوبة ومتوفر في عبوات متعددة، مقاس XL",
     "url": "https://www.amazon.sa/dp/B00P1ZE9Q0",
-    "price": 75.0
+    "price": 74.0
   },
   "B086KY66P6": {
     "name": "تي شيرت داخلي بقصة مرنة مريحة وقبة دائرية بدون طوق للرجال من هانس - ابيض - 3 قطع - Small",
@@ -1673,5 +1673,760 @@
     "name": "بهارات السبعة من زينة، 200 جم",
     "url": "https://www.amazon.sa/dp/B0F8HP2M66",
     "price": 10.0
+  },
+  "B09VNSVLL7": {
+    "name": "ارز بنجابي الشعلان، ارز بسمتي ابيض فاخر، 5 كجم",
+    "url": "https://amzn.eu/d/0aCPeGqC?tag=mohammedala02-21",
+    "price": 41.0
+  },
+  "B0B615HV78": {
+    "name": "بسكويت زيرو بالشوفان والشوكولاتة الداكنة بدون سكر مضاف من غولون، 275 جم",
+    "url": "https://amzn.eu/d/06yFBESt?tag=mohammedala02-21",
+    "price": 12.0
+  },
+  "B0F6YPPN4H": {
+    "name": "مقرمشات بنكهة الحبنة الشيدر من جولون، 250 جم (عبوة من قطعتين)",
+    "url": "https://amzn.eu/d/0dXJfBzV?tag=mohammedala02-21",
+    "price": 20.0
+  },
+  "B00MQURNGG": {
+    "name": "شامبو فارماسيريس للجنسين للشعر الخفيف 250 مليلتر لنمو الشعر ومنع التساقط بالكافيين والبيوتين بدون رائحة",
+    "url": "https://amzn.eu/d/0cVWcWa2?tag=mohammedala02-21",
+    "price": 70.0
+  },
+  "B09MBYFC4B": {
+    "name": "شامبو من فاتيكا لجميع أنواع الشعر، مضاد لتساقط الشعر، بمكونات طبيعية، عبوة واحدة بسعة 1000 مليلتر",
+    "url": "https://amzn.eu/d/0afVN9Bz?tag=mohammedala02-21",
+    "price": 14.0
+  },
+  "B08V4G8H9J": {
+    "name": "شامبو سعة 600 مل من لوريال لحماية لون الشعر المصبوغ",
+    "url": "https://amzn.eu/d/0e4n8BmI?tag=mohammedala02-21",
+    "price": 12.0
+  },
+  "B07NVB5WY7": {
+    "name": "شامبو من دوف للشعر الجاف، مرطب، أصلي، عبوة واحدة، سعة 200 مليلتر",
+    "url": "https://amzn.eu/d/0j7tjsSC?tag=mohammedala02-21",
+    "price": 6.0
+  },
+  "B017A62XYW": {
+    "name": "شامبو بزيت الأرجان المغربي مضاد للتقصف ويرطب الشعر الناعم ومناسب للشعر الجاف الذي لا يمكن تصفيفه من فاتيكا ناتشورالز، 200 مل",
+    "url": "https://amzn.eu/d/09NYf3CP?tag=mohammedala02-21",
+    "price": 4.0
+  },
+  "B0F83PVP3F": {
+    "name": "شامبو وبلسم من لوريال باريس للمعان عالي 360 مليلتر",
+    "url": "https://amzn.eu/d/07osVPxY?tag=mohammedala02-21",
+    "price": 9.0
+  },
+  "B08YY2GKYG": {
+    "name": "اكسترا اورديناري بالزيت لوريال باريس",
+    "url": "https://www.amazon.sa/dp/B08YY2GKYG?tag=mohammedala02-21",
+    "price": 12.0
+  },
+  "B0DBVHVC5K": {
+    "name": "أوجيإكس بالبيوتين والكولاجين وفيتامين E",
+    "url": "https://www.amazon.sa/dp/B0DBVHVC5K?tag=mohammedala02-21",
+    "price": 31.0
+  },
+  "B0B3FBK9KW": {
+    "name": "بيبي والمموج، للتنعيم بمستخلص للبشرة الحساسة",
+    "url": "https://www.amazon.sa/dp/B0B3FBK9KW?tag=mohammedala02-21",
+    "price": 94.0
+  },
+  "B0856QWCZN": {
+    "name": "شامبو بروتين العادي - صالون",
+    "url": "https://www.amazon.sa/dp/B0856QWCZN?tag=mohammedala02-21",
+    "price": 44.0
+  },
+  "B0968VPPGD": {
+    "name": "بلونديفاير لوريال بروفيشنال، المعالج، النحاسي",
+    "url": "https://www.amazon.sa/dp/B0968VPPGD?tag=mohammedala02-21",
+    "price": 101.0
+  },
+  "B0089WNKVC": {
+    "name": "اتوديرم للبشرة العادية الجافة بيوديرما",
+    "url": "https://www.amazon.sa/dp/B0089WNKVC?tag=mohammedala02-21",
+    "price": 56.0
+  },
+  "B0DFH3WJ9D": {
+    "name": "استحمام اليجانت المجدد خالي من البارابين للاستخدام اليومي",
+    "url": "https://www.amazon.sa/dp/B0DFH3WJ9D?tag=mohammedala02-21",
+    "price": 34.0
+  },
+  "B07PBCVZR7": {
+    "name": "استحمام للعناية بالبشرة ديتول، برائحة",
+    "url": "https://www.amazon.sa/dp/B07PBCVZR7?tag=mohammedala02-21",
+    "price": 24.0
+  },
+  "B07YCWYVN9": {
+    "name": "فيلوسوفي استحمام بالفانيليا فقاعات الاستحمام",
+    "url": "https://www.amazon.sa/dp/B07YCWYVN9?tag=mohammedala02-21",
+    "price": 141.0
+  },
+  "B07FDBJDKY": {
+    "name": "فرشاة وناعمة بالفحم الأسود كولجيت",
+    "url": "https://www.amazon.sa/dp/B07FDBJDKY?tag=mohammedala02-21",
+    "price": 9.0
+  },
+  "B075WYW77V": {
+    "name": "كولجيت فرشاة بشعيرات متوسطة زيجزاج",
+    "url": "https://www.amazon.sa/dp/B075WYW77V?tag=mohammedala02-21",
+    "price": 18.0
+  },
+  "B0F9P6FPNP": {
+    "name": "سيجو كهربائية للبالغين فرشاة، والاطفال",
+    "url": "https://www.amazon.sa/dp/B0F9P6FPNP?tag=mohammedala02-21",
+    "price": 174.0
+  },
+  "B0DGD1F3P7": {
+    "name": "اسنان للاستعمال الميكاكوز، للسفر، محمولة",
+    "url": "https://www.amazon.sa/dp/B0DGD1F3P7?tag=mohammedala02-21",
+    "price": 39.0
+  },
+  "B077VVJXZ7": {
+    "name": "كورابروكس النعومة، بشعيرات كورن® للبالغين",
+    "url": "https://www.amazon.sa/dp/B077VVJXZ7?tag=mohammedala02-21",
+    "price": 29.0
+  },
+  "B0DMCPRPYS": {
+    "name": "فرشاة الخيزران بشعيرات طبيعية نايلون",
+    "url": "https://www.amazon.sa/dp/B0DMCPRPYS?tag=mohammedala02-21",
+    "price": 111.0
+  },
+  "B0D7YZ2G42": {
+    "name": "كهربائية هايسمايل، باللون الأزرق الساطع",
+    "url": "https://www.amazon.sa/dp/B0D7YZ2G42?tag=mohammedala02-21",
+    "price": 181.0
+  },
+  "B0F2GV1JSF": {
+    "name": "بارودونتاكس لتنظيف الأسنان بنكهة الأعشاب",
+    "url": "https://www.amazon.sa/dp/B0F2GV1JSF?tag=mohammedala02-21",
+    "price": 32.0
+  },
+  "B003AE6JZ8": {
+    "name": "بارادونتاكس اليومي، والاسنان الصحية، الكحول،",
+    "url": "https://www.amazon.sa/dp/B003AE6JZ8?tag=mohammedala02-21",
+    "price": 27.0
+  },
+  "B081V2N1V2": {
+    "name": "معجون أسنان بالنعناع المنعش سنسوداين",
+    "url": "https://www.amazon.sa/dp/B081V2N1V2?tag=mohammedala02-21",
+    "price": 11.0
+  },
+  "B0BNF22LRH": {
+    "name": "معجون أسنان لاسنان الحساسة بيوريبير",
+    "url": "https://www.amazon.sa/dp/B0BNF22LRH?tag=mohammedala02-21",
+    "price": 18.0
+  },
+  "B076B8PX14": {
+    "name": "بالفحم الفلورايد كبريتات الصوديوم هالو",
+    "url": "https://www.amazon.sa/dp/B076B8PX14?tag=mohammedala02-21",
+    "price": 42.0
+  },
+  "B0BL625LMY": {
+    "name": "معجون بالفلورايد وسوربيتول المانجو هيسمايل",
+    "url": "https://www.amazon.sa/dp/B0BL625LMY?tag=mohammedala02-21",
+    "price": 19.0
+  },
+  "B07PKH7S5B": {
+    "name": "سنسوداين جل تنظيف عميق، 75",
+    "url": "https://www.amazon.sa/dp/B07PKH7S5B?tag=mohammedala02-21",
+    "price": 24.0
+  },
+  "B0CV529CR5": {
+    "name": "معجون أسنان بنكهة التوت الأزرق",
+    "url": "https://www.amazon.sa/dp/B0CV529CR5?tag=mohammedala02-21",
+    "price": 26.0
+  },
+  "B0FR39CH8R": {
+    "name": "معجون بروتكشن بالنعناع المنعش كولجيت",
+    "url": "https://www.amazon.sa/dp/B0FR39CH8R?tag=mohammedala02-21",
+    "price": 45.0
+  },
+  "B0DV9WPRXQ": {
+    "name": "معجون طماطم تيترا رنا، عبوة",
+    "url": "https://www.amazon.sa/dp/B0DV9WPRXQ?tag=mohammedala02-21",
+    "price": 10.0
+  },
+  "B08L5VWGTB": {
+    "name": "صلصة طماطم العلالي، 220 غرام",
+    "url": "https://www.amazon.sa/dp/B08L5VWGTB?tag=mohammedala02-21",
+    "price": 12.0
+  },
+  "B01L75EFZC": {
+    "name": "مايونيز بالثوم الحقيقي هاينز، He012",
+    "url": "https://www.amazon.sa/dp/B01L75EFZC?tag=mohammedala02-21",
+    "price": 10.0
+  },
+  "B0CQSK8655": {
+    "name": "مايونيز القوام هاينز، قارورة المقلوب،",
+    "url": "https://www.amazon.sa/dp/B0CQSK8655?tag=mohammedala02-21",
+    "price": 16.0
+  },
+  "B00612E3PO": {
+    "name": "منتج بدون وصف (يرجى المراجعة يدويًا) - B00612E3PO",
+    "url": "https://www.amazon.sa/dp/B00612E3PO?tag=mohammedala02-21",
+    "price": 14.0
+  },
+  "B0DCSTPG2R": {
+    "name": "منتج بدون وصف (يرجى المراجعة يدويًا) - B0DCSTPG2R",
+    "url": "https://www.amazon.sa/dp/B0DCSTPG2R?tag=mohammedala02-21",
+    "price": 36.0
+  },
+  "B0926LMZ6F": {
+    "name": "حبوب بن محمصة مخصصة من دريب اون- حبوب كاملة 250 غرام - البرازيل، الحبة الكاملة، كيس",
+    "url": "https://www.amazon.sa/dp/B0926LMZ6F?tag=mohammedala02-21",
+    "price": 30.0
+  },
+  "B0DCTZ29ZJ": {
+    "name": "سمسم أبيض من تاك تات، 200 جرام",
+    "url": "https://www.amazon.sa/dp/B0DCTZ29ZJ?tag=mohammedala02-21",
+    "price": 8.0
+  },
+  "B0FXWSLX7D": {
+    "name": "كاتشب طماطم (310 جرام) &quot;تيبتري&quot;",
+    "url": "https://www.amazon.sa/dp/B0FXWSLX7D?tag=mohammedala02-21",
+    "price": 45.0
+  },
+  "B0G2S4SPNY": {
+    "name": "هاينز زجاجة كاتشب طماطم قابلة للضغط، 700 جرام",
+    "url": "https://www.amazon.sa/dp/B0G2S4SPNY?tag=mohammedala02-21",
+    "price": 14.0
+  },
+  "B00061EPZO": {
+    "name": "تباسكو صلصة الفلفل من شيبوتل 150 مل",
+    "url": "https://www.amazon.sa/dp/B00061EPZO?tag=mohammedala02-21",
+    "price": 51.0
+  },
+  "B0FWZT7G83": {
+    "name": "صلصة الهالبينو الحارة من ريد روستر، 355 مل",
+    "url": "https://www.amazon.sa/dp/B0FWZT7G83?tag=mohammedala02-21",
+    "price": 7.0
+  },
+  "B0D8ZPCYMC": {
+    "name": "فرشاة أسنان ايس متوسطة الحجم من تارا افانتي، عبوة من 12 قطعة",
+    "url": "https://www.amazon.sa/dp/B0D8ZPCYMC?tag=mohammedala02-21",
+    "price": 43.0
+  },
+  "B0037LK0EU": {
+    "name": "دكتور منظف غسالة من بيكمان، 250 مل",
+    "url": "https://www.amazon.sa/dp/B0037LK0EU?tag=mohammedala02-21",
+    "price": 15.0
+  },
+  "B07DDM24FP": {
+    "name": "وجبات خفيفة من الذرة المخبوزة بملح البحر من اورجانيك لاند، 50 جم",
+    "url": "https://www.amazon.sa/dp/B07DDM24FP?tag=mohammedala02-21",
+    "price": 11.0
+  },
+  "B00DLDH1N2": {
+    "name": "مجموعة بروتين بنكهة عجينة الكوكيز برقائق الشوكولاتة، يحوي نسبة عالية من البروتين ومنخفضة الكربوهيدرات وخال من الجلوتين والصويا ومتوافق مع نظام كيتو الغذائي مكونة من 12 قطعة من كويست | 21g Protein, 12g Fiber, 4g Net Carbs, Gluten Free, High Quality Protein, Soft and Chewy, Individually Wrapped 2.12oz Bars",
+    "url": "https://www.amazon.sa/dp/B00DLDH1N2?tag=mohammedala02-21",
+    "price": 227.0
+  },
+  "B091VQBBGW": {
+    "name": "زبدة فول سوداني كريمية بقطع السواني المقرمشة، نباتية، خالية من الجلوتين من اميريكان جاردن، 454 جم",
+    "url": "https://www.amazon.sa/dp/B091VQBBGW?tag=mohammedala02-21",
+    "price": 14.0
+  },
+  "B0BNNRSZY5": {
+    "name": "صلصة حلوى الفراولة من ديابلو، قطعة واحدة، 290 مل",
+    "url": "https://www.amazon.sa/dp/B0BNNRSZY5?tag=mohammedala02-21",
+    "price": 27.0
+  },
+  "B08C2871CF": {
+    "name": "نخيل العالية بسكويت بالقرفة والتمر | عبوة 250 غرام | حلويات عربية اصلية | مصنوعة من مكونات طبيعية",
+    "url": "https://www.amazon.sa/dp/B08C2871CF?tag=mohammedala02-21",
+    "price": 15.0
+  },
+  "B0054TMCCQ": {
+    "name": "بسكويت لواكر كوادريتيني كابتشينو - 110 جم",
+    "url": "https://www.amazon.sa/dp/B0054TMCCQ?tag=mohammedala02-21",
+    "price": 13.0
+  },
+  "B08KZ5FVZ2": {
+    "name": "دقيق سوبريور من فوم لجميع الاغراض، 1 كغم - عبوة من قطعة واحدة",
+    "url": "https://www.amazon.sa/dp/B08KZ5FVZ2?tag=mohammedala02-21",
+    "price": 1.0
+  },
+  "B07PKDCCTJ": {
+    "name": "صلصة بيستو بالثوم البري من ساكلا، 190 غرام",
+    "url": "https://www.amazon.sa/dp/B07PKDCCTJ?tag=mohammedala02-21",
+    "price": 24.0
+  },
+  "B08C192WMP": {
+    "name": "زيت نباتي نقي بسعة 2.9 لتر من العربي",
+    "url": "https://www.amazon.sa/dp/B08C192WMP?tag=mohammedala02-21",
+    "price": 29.0
+  },
+  "B001UP7B42": {
+    "name": "أكياس شاي جذر الهندباء بنكهة المحمص من تراديشونال ميديسينالز، عبوة 16 قطعة",
+    "url": "https://www.amazon.sa/dp/B001UP7B42",
+    "price": 88.0
+  },
+  "B006R0CKLO": {
+    "name": "تراديشينل ميديسن شاي عشبي عضوي بالزعرور والكركديه يعزز صحة القلب (عبوة من قطعة واحدة) - 16 كيس شاي",
+    "url": "https://www.amazon.sa/dp/B006R0CKLO",
+    "price": 58.0
+  },
+  "B078964YTY": {
+    "name": "تراديشينل ميديسن شاي عضوي ملين بالنعناع من سموث موف، 16 قيراط",
+    "url": "https://www.amazon.sa/dp/B078964YTY",
+    "price": 69.0
+  },
+  "B0D31TX825": {
+    "name": "حذاء رياضي للرجال من أون كلاود 6 كوست",
+    "url": "https://www.amazon.sa/dp/B0D31TX825",
+    "price": 709.0
+  },
+  "B0D3BD1Y2M": {
+    "name": "حذاء ركض كلاود سيرفر تريل للرجال من اون",
+    "url": "https://www.amazon.sa/dp/B0D3BD1Y2M",
+    "price": 1010.0
+  },
+  "B0GLZY63NG": {
+    "name": "اون حذاء رياضي 4 ايه دي للرجال من كلاود سويفت",
+    "url": "https://www.amazon.sa/dp/B0GLZY63NG",
+    "price": 752.0
+  },
+  "B0GJ78R3SK": {
+    "name": "حذاء رياضي كلاود مونستر فويد للرجال من اون",
+    "url": "https://www.amazon.sa/dp/B0GJ78R3SK",
+    "price": 819.0
+  },
+  "B0F7CY2SGH": {
+    "name": "اون حذاء رياضي كلاود مونستر 3 عريض للرجال",
+    "url": "https://www.amazon.sa/dp/B0F7CY2SGH",
+    "price": 1672.0
+  },
+  "B098NL43F8": {
+    "name": "حذاء رياضي كلاود تيري للرجال من اون",
+    "url": "https://www.amazon.sa/dp/B098NL43F8",
+    "price": 746.0
+  },
+  "B0BNC8QQCG": {
+    "name": "حذاء رياضي كلاود 5 كوست للرجال من اون",
+    "url": "https://www.amazon.sa/dp/B0BNC8QQCG",
+    "price": 1663.0
+  },
+  "B0C5QDDQ7H": {
+    "name": "اون حذاء رياضي كلاودرانر 2 للرجال",
+    "url": "https://www.amazon.sa/dp/B0C5QDDQ7H",
+    "price": 862.0
+  },
+  "B0C2HMMP5S": {
+    "name": "اون راننج CLOUDNOVA أبيض",
+    "url": "https://www.amazon.sa/dp/B0C2HMMP5S",
+    "price": 761.0
+  },
+  "B0D3VHL8GB": {
+    "name": "حذاء جري فريش فوم اكس 880 V15 للرجال من نيو بالانس",
+    "url": "https://www.amazon.sa/dp/B0D3VHL8GB",
+    "price": 601.0
+  },
+  "B0DLV9LWQZ": {
+    "name": "جديدة.",
+    "url": "https://www.amazon.sa/dp/B0DLV9LWQZ",
+    "price": 389.0
+  },
+  "B0F4M4Y8WL": {
+    "name": "حذاء جري فريش فوم 680 V9 للرجال من نيو بالانس",
+    "url": "https://www.amazon.sa/dp/B0F4M4Y8WL",
+    "price": 732.0
+  },
+  "B0CL3K5S2C": {
+    "name": "حذاء رياضي من نيو بالانس، BB550",
+    "url": "https://www.amazon.sa/dp/B0CL3K5S2C",
+    "price": 606.0
+  },
+  "B0BZ3DSTL9": {
+    "name": "حذاء رياضي 530 للجنسين من نيو بالانس",
+    "url": "https://www.amazon.sa/dp/B0BZ3DSTL9",
+    "price": 540.0
+  },
+  "B0CNKXMZNS": {
+    "name": "نيو بلانس حذاء رياضي فريش فوم اكس بالوس للرجال",
+    "url": "https://www.amazon.sa/dp/B0CNKXMZNS",
+    "price": 1188.0
+  },
+  "B0F4967TND": {
+    "name": "حذاء رياضي روج 6 للرجال من اندر ارمور",
+    "url": "https://www.amazon.sa/dp/B0F4967TND",
+    "price": 309.0
+  },
+  "B0CMDF19NR": {
+    "name": "حذاء رياضي بروجيكت روك بلود سويت ريسبكت 4 للرجال من اندر ارمور",
+    "url": "https://www.amazon.sa/dp/B0CMDF19NR",
+    "price": 335.0
+  },
+  "B0D16773H2": {
+    "name": "حذاء رياضي ايدج من الجلد للرجال من اندر ارمور",
+    "url": "https://www.amazon.sa/dp/B0D16773H2",
+    "price": 320.0
+  },
+  "B0DH58G699": {
+    "name": "حذاء جري تشارجد اسيرت 10 للرجال من اندر ارمور",
+    "url": "https://www.amazon.sa/dp/B0DH58G699",
+    "price": 243.0
+  },
+  "B09XBV5363": {
+    "name": "حذاء الجري تشارجد بريز 2 للرجال من اندر ارمور",
+    "url": "https://www.amazon.sa/dp/B09XBV5363",
+    "price": 286.0
+  },
+  "B07S8HZ7G6": {
+    "name": "اندر ارمور حذاء جري للرجال من يو ايه ريبل 2.0 NM1",
+    "url": "https://www.amazon.sa/dp/B07S8HZ7G6",
+    "price": 325.0
+  },
+  "B08R69J7XV": {
+    "name": "حذاء تدريب روك 4 للرجال من اندر ارمور بروجيكت",
+    "url": "https://www.amazon.sa/dp/B08R69J7XV",
+    "price": 1142.0
+  },
+  "B0BZY39CSC": {
+    "name": "اندر ارمور حذاء رياضي تشارجد بيرسوت 3 بشعار كبير للرجال",
+    "url": "https://www.amazon.sa/dp/B0BZY39CSC",
+    "price": 324.0
+  },
+  "B0BNBDRKVF": {
+    "name": "حذاء المصارعة ماتفليكس 7 للرجال من اسيكس",
+    "url": "https://www.amazon.sa/dp/B0BNBDRKVF",
+    "price": 340.0
+  },
+  "B0DPLR3GB7": {
+    "name": "اسيكس حذاء رياضي للرجال Gt-2000 14",
+    "url": "https://www.amazon.sa/dp/B0DPLR3GB7",
+    "price": 609.0
+  },
+  "B0CR1R5XKZ": {
+    "name": "حذاء رياضي للرجال من اسيكس - GEL-1130",
+    "url": "https://www.amazon.sa/dp/B0CR1R5XKZ",
+    "price": 675.0
+  },
+  "B0F5BL5RCN": {
+    "name": "حذاء رياضي جل كوانتوم 360 VIII للرجال من اسيكس",
+    "url": "https://www.amazon.sa/dp/B0F5BL5RCN",
+    "price": 635.0
+  },
+  "B0BYBHRN1F": {
+    "name": "حذاء رياضي للرجال من اسيكس - GEL-1130",
+    "url": "https://www.amazon.sa/dp/B0BYBHRN1F",
+    "price": 639.0
+  },
+  "B0CQYGS4NS": {
+    "name": "جاك اند جونز تي شيرت جوربرونكس ارك كبير برقبة دائرية ضيقة واكمام قصيرة للرجال",
+    "url": "https://www.amazon.sa/dp/B0CQYGS4NS",
+    "price": 68.0
+  },
+  "B08ZNMN1R3": {
+    "name": "تيشيرت باكمام قصيرة وقبة دائرية للرجال من بيست سيلر ايه/اس",
+    "url": "https://www.amazon.sa/dp/B08ZNMN1R3",
+    "price": 80.0
+  },
+  "B0CR1BCLD9": {
+    "name": "جاك اند جونز تي شيرت جوربروكلين باكمام قصيرة ورسومات خلفية للرجال",
+    "url": "https://www.amazon.sa/dp/B0CR1BCLD9",
+    "price": 77.0
+  },
+  "B0D5NF7SZX": {
+    "name": "تي شيرت بولو بأكمام قصيرة وقصة عادية من قطن بيكيه عضوي بتصميم قابل للتمدد للرجال من تومي هيلفيجر",
+    "url": "https://www.amazon.sa/dp/B0D5NF7SZX",
+    "price": 245.0
+  },
+  "B013IOEHEO": {
+    "name": "قميص داخلي للرجال من القطن بتصميم كلاسيكي بقبة دائرية بدون طوق من تومي هيلفيجر",
+    "url": "https://www.amazon.sa/dp/B013IOEHEO",
+    "price": 267.0
+  },
+  "B0H9VCYWZL": {
+    "name": "تي شيرت تومي إكس كاديلاك F1 بيريز للرجال (عبوة من قطعة واحدة)",
+    "url": "https://www.amazon.sa/dp/B0H9VCYWZL",
+    "price": 692.0
+  },
+  "B0GH4DTXCB": {
+    "name": "تومي هيليفيغر قميص بولو للرجال من القطن المحبوك بأكمام قصيرة (عبوة من قطعة واحدة)",
+    "url": "https://www.amazon.sa/dp/B0GH4DTXCB",
+    "price": 667.0
+  },
+  "B0CZS8H912": {
+    "name": "تومي هيليفيغر قميص بولو بقصة عادية للرجال من تومي",
+    "url": "https://www.amazon.sa/dp/B0CZS8H912",
+    "price": 522.0
+  },
+  "B0CVCGHGLG": {
+    "name": "تومي هيليفيغر قميص باكمام طويلة ورقبة دائرية ضيقة - كربون هيذر، مقاس L",
+    "url": "https://www.amazon.sa/dp/B0CVCGHGLG",
+    "price": 395.0
+  },
+  "B07DPM6B7P": {
+    "name": "تومي هيليفيغر قميص رسمي للرجال بقصة عادية غير قابلة للكي بلون واحد، نايت بلو، XL",
+    "url": "https://www.amazon.sa/dp/B07DPM6B7P",
+    "price": 396.0
+  },
+  "B0DFC77ZVY": {
+    "name": "علبة مياه فوارة بالليمون من ميسون بيرير، 10×250 مل",
+    "url": "https://www.amazon.sa/dp/B0DFC77ZVY",
+    "price": 34.0
+  },
+  "B00LMYTKCW": {
+    "name": "عسل زهرة الاكاسيا من هنتز بوزن 250 غرام- عبوة من قطعة واحدة",
+    "url": "https://www.amazon.sa/dp/B00LMYTKCW",
+    "price": 35.0
+  },
+  "B09PBS5Z7N": {
+    "name": "اوراق شاي سيلاني خالصة وفاخرة، في علبة معدنية بوزن 300 غرام من ابو جبل",
+    "url": "https://www.amazon.sa/dp/B09PBS5Z7N",
+    "price": 44.0
+  },
+  "B0FBM9W3H8": {
+    "name": "شاي مثلج بنكهة استوائية من زوي، 6 × 320 مل",
+    "url": "https://www.amazon.sa/dp/B0FBM9W3H8",
+    "price": 17.0
+  },
+  "B0949FDHBT": {
+    "name": "شاي اسود باوراق كاملة في علبة معدنية من ابو جبل، 300 جرام - عبوة واحدة",
+    "url": "https://www.amazon.sa/dp/B0949FDHBT",
+    "price": 44.0
+  },
+  "B0DRJ34GMD": {
+    "name": "تي شيرت بقصة عادية وشعار مطرز وتصميم واسع للرجال من تومي جينز، لون أسود، مقاس ميديام",
+    "url": "https://www.amazon.sa/dp/B0DRJ34GMD",
+    "price": 164.0
+  },
+  "B0D5YLL6ZG": {
+    "name": "ناوتيكا قميص بولو كوبالت للرجال من كونولي",
+    "url": "https://www.amazon.sa/dp/B0D5YLL6ZG",
+    "price": 52.0
+  },
+  "B0B8ZGN3T9": {
+    "name": "اميريكان ايغل قميص اوكسفورد كلاسيكي باكمام قصيرة وازرار للرجال, أحمر، بورغندي, S",
+    "url": "https://www.amazon.sa/dp/B0B8ZGN3T9",
+    "price": 83.0
+  },
+  "B0F6VYF5W9": {
+    "name": "قميص بولو بادي للرجال من بوس (نسخة أخرى)",
+    "url": "https://www.amazon.sa/dp/B0F6VYF5W9",
+    "price": 301.0
+  },
+  "B0F6XDTK2Z": {
+    "name": "بوس حذاء بي وايلد نيتشر مودرن للرجال",
+    "url": "https://www.amazon.sa/dp/B0F6XDTK2Z",
+    "price": 194.0
+  },
+  "B09169BNTL": {
+    "name": "قميص تيمليجا جيرسي للاطفال من الجنسين من بوما",
+    "url": "https://www.amazon.sa/dp/B09169BNTL",
+    "price": 106.64
+  },
+  "B0BTTPHNKM": {
+    "name": "سروال كاجوال تيم كاب محبوك للرجال من بوما",
+    "url": "https://www.amazon.sa/dp/B0BTTPHNKM",
+    "price": 205.0
+  },
+  "B098TT8HV9": {
+    "name": "بوما بنطلون رياضي للرجال من اي اس اس بشعار Fl Cl",
+    "url": "https://www.amazon.sa/dp/B098TT8HV9",
+    "price": 192.0
+  },
+  "B0BNLN2W6G": {
+    "name": "بوما تي شيرت هيذر للرجال من اي اس اس",
+    "url": "https://www.amazon.sa/dp/B0BNLN2W6G",
+    "price": 105.0
+  },
+  "B09168R247": {
+    "name": "قميص تيمليجا من قطن الجيرسي للرجال من بوما",
+    "url": "https://www.amazon.sa/dp/B09168R247",
+    "price": 115.0
+  },
+  "B0F4RMRPGT": {
+    "name": "اديداس تي شيرت بدون اكمام للرجال Adi365 من اسينشالز للجري (عبوة من قطعة واحدة)",
+    "url": "https://www.amazon.sa/dp/B0F4RMRPGT",
+    "price": 128.0
+  },
+  "B0BNL6B2JB": {
+    "name": "قبعة ايروريدي شبكية من أربع ألواح للجري للبالغين من الجنسين من أديداس",
+    "url": "https://www.amazon.sa/dp/B0BNL6B2JB",
+    "price": 114.0
+  },
+  "B0CL2T2CFB": {
+    "name": "اديداس تي شيرت اون ذا رن للنساء",
+    "url": "https://www.amazon.sa/dp/B0CL2T2CFB",
+    "price": 138.0
+  },
+  "B0DNBGK5DT": {
+    "name": "تي شيرت للنساء بتصميم زهور مشعة من اديداس",
+    "url": "https://www.amazon.sa/dp/B0DNBGK5DT",
+    "price": 114.0
+  },
+  "B0GV1DJ15X": {
+    "name": "اديداس كاب بيسبول يوفنتوس للبالغين من الجنسين (عبوة من قطعة واحدة)",
+    "url": "https://www.amazon.sa/dp/B0GV1DJ15X",
+    "price": 127.0
+  },
+  "B0C2JK3XBM": {
+    "name": "adidas Adilette Comfort womens Slide Sandal",
+    "url": "https://www.amazon.sa/dp/B0C2JK3XBM",
+    "price": 366.0
+  },
+  "B0C43L5PW1": {
+    "name": "جاكيت اسنشيالز رجالي بغطاء للرأس معزول ومزين بثلاثة خطوط من أديداس",
+    "url": "https://www.amazon.sa/dp/B0C43L5PW1",
+    "price": 440.0
+  },
+  "B0DJBKXXLF": {
+    "name": "جاكيت للرجال اسنشيالز بتقنية كليما وورم مزين بـ 3 خطوط بغطاء رأس معزول من اديداس",
+    "url": "https://www.amazon.sa/dp/B0DJBKXXLF",
+    "price": 559.0
+  },
+  "B0CZPP2XZY": {
+    "name": "بدلة رياضية بيسيك بثلاثة خطوط من قماش تيري الفرنسي للرجال من اديداس، بدلة رياضية",
+    "url": "https://www.amazon.sa/dp/B0CZPP2XZY",
+    "price": 214.0
+  },
+  "B0CZSJM25W": {
+    "name": "جاكيت شتوي تيرو 24 للرجال من اديداس، لون أسود، مقاس ميديوم M",
+    "url": "https://www.amazon.sa/dp/B0CZSJM25W",
+    "price": 415.0
+  },
+  "B0BNN2Q5NW": {
+    "name": "اديداس شنطة صغيرة للعودة الى المدرسة - اسود/ابيض, أسود/أبيض, قياس واحد, حقيبة أخرى",
+    "url": "https://www.amazon.sa/dp/B0BNN2Q5NW",
+    "price": 130.0
+  },
+  "B0CZTMXJRX": {
+    "name": "شنطة خصر بتصميم لينير للبالغين من الجنسين من اديداس، لون أسود، مقاس واحد",
+    "url": "https://www.amazon.sa/dp/B0CZTMXJRX",
+    "price": 55.0
+  },
+  "B0FVMM8S43": {
+    "name": "اديداس شنطة تبريد ميكي ماوس للاطفال من الجنسين من ديزني، اسود/ياقوت نقي/اوف وايت، مقاس واحد",
+    "url": "https://www.amazon.sa/dp/B0FVMM8S43",
+    "price": 159.0
+  },
+  "B0F59S8FKX": {
+    "name": "شنطة ظهر برايم للبالغين من الجنسين من اديداس",
+    "url": "https://www.amazon.sa/dp/B0F59S8FKX",
+    "price": 150.0
+  },
+  "B0F3JZXBPH": {
+    "name": "بنطال تدريب اديداس Entrada 26 للرجال",
+    "url": "https://www.amazon.sa/dp/B0F3JZXBPH",
+    "price": 175.0
+  },
+  "B0D22W6L2M": {
+    "name": "سروال رياضي رجالي من أديداس، بتصميم ثلاث خطوط ومصنوع من قماش تريكو، بخصر عادي وانخفاض تدريجي عند الأرجل",
+    "url": "https://www.amazon.sa/dp/B0D22W6L2M",
+    "price": 344.0
+  },
+  "B0CZXVJXFY": {
+    "name": "سروال رياضي اسنشيالز من الصوف بشعار كبير بأساور للرجال من اديداس",
+    "url": "https://www.amazon.sa/dp/B0CZXVJXFY",
+    "price": 195.0
+  },
+  "B0CZ7K9VR1": {
+    "name": "سروال رياضي سكوادرا 25 للرجال من اديداس",
+    "url": "https://www.amazon.sa/dp/B0CZ7K9VR1",
+    "price": 112.0
+  },
+  "B0FDSKZZ5F": {
+    "name": "اديداس قميص بولو بارز الملمس للرجال من بيرفورمانس (عبوة من قطعة واحدة)",
+    "url": "https://www.amazon.sa/dp/B0FDSKZZ5F",
+    "price": 401.0
+  },
+  "B084CMHH5L": {
+    "name": "تي شيرت بيرفورمانس 3.0 بولو للرجال من اندر ارمور، ألوان متعددة",
+    "url": "https://www.amazon.sa/dp/B084CMHH5L",
+    "price": 636.0
+  },
+  "B0F9Z2SM4L": {
+    "name": "نايك تيشرت بولو قطن للرجال من تيم",
+    "url": "https://www.amazon.sa/dp/B0F9Z2SM4L",
+    "price": 216.0
+  },
+  "B0F4255WNX": {
+    "name": "الإعلان المدعوم - HAOKEKE Men's Summer T Shirt, Solid Casual Short Sleeve Tees Shirts for Men, Man's T Shirts Cotton for S...",
+    "url": "https://www.amazon.sa/dp/B0F4255WNX",
+    "price": 48.0
+  },
+  "B0C3R2QWX4": {
+    "name": "الإعلان المدعوم - قميص رجالي كلاسيكي بجيب واحد قياسي من ليفايس (عبوة من قطعة واحدة)",
+    "url": "https://www.amazon.sa/dp/B0C3R2QWX4",
+    "price": 129.0
+  },
+  "B091NX6395": {
+    "name": "تيشيرت سكيور للرجال من سانثوم، 1 قطعة",
+    "url": "https://www.amazon.sa/dp/B091NX6395",
+    "price": 45.0
+  },
+  "B0GRWRDZW2": {
+    "name": "الإعلان المدعوم - تي شيرت واسع بطابع حضري مصنوع من 100% قطن، بتصميم عصري بقصة فضفاضة وأكتاف منسدلة، للإطلالة الكاجوال للرج...",
+    "url": "https://www.amazon.sa/dp/B0GRWRDZW2",
+    "price": 99.0
+  },
+  "B0HCL372KR": {
+    "name": "تي شيرت عصري بأكمام طويلة بقبة دائرية بدون طوق للرجال من بولو رالف لورين",
+    "url": "https://www.amazon.sa/dp/B0HCL372KR",
+    "price": 639.0
+  },
+  "B078LFBHNN": {
+    "name": "تيشيرت للرجال من القطن برقبة دائرية بدون طوق، تيشيرت لمتوسطي الوزن، مقاس اكس سمول XS، سكارليت سكريبت من شامبيون",
+    "url": "https://www.amazon.sa/dp/B078LFBHNN",
+    "price": 71.0
+  },
+  "B09YY392DL": {
+    "name": "قميص كلاسيك بولو للرجال بأكمام قصيرة خفيف الوزن وقصة ضيقة كاجوال من واي تي دي",
+    "url": "https://www.amazon.sa/dp/B09YY392DL",
+    "price": 76.0
+  },
+  "B0DWL6HNYD": {
+    "name": "تي شيرت تي جيه ام بقصة فضفاضة بشعار خطي للرجال من تومي جينز، لون اكرو، مقاس لارج (عبوة من 1 قطعة)",
+    "url": "https://www.amazon.sa/dp/B0DWL6HNYD",
+    "price": 198.0
+  },
+  "B088CQMH5S": {
+    "name": "تي شيرت بولو رالف لورين للرجال بقصة كلاسيكية واكمام قصيرة ورقبة V",
+    "url": "https://www.amazon.sa/dp/B088CQMH5S",
+    "price": 372.0
+  },
+  "B0CBSG12J7": {
+    "name": "بولو رالف لورين تي شيرت دينيم سبلاي للرجال من القطن بولو بوني دينيم بلوجو جرافيك ذهبي",
+    "url": "https://www.amazon.sa/dp/B0CBSG12J7",
+    "price": 386.0
+  },
+  "B081HGBQ6G": {
+    "name": "بولو رالف لورين قميص بولو للرجال بقصة كلاسيكية 100% قطن ابيض (L)",
+    "url": "https://www.amazon.sa/dp/B081HGBQ6G",
+    "price": 825.0
+  },
+  "B0FH5SBCC6": {
+    "name": "بولو رالف لورين تي شيرت حراري باكمام طويلة وقبة دائرية بدون طوق للرجال",
+    "url": "https://www.amazon.sa/dp/B0FH5SBCC6",
+    "price": 340.0
+  },
+  "B0BQDZ83WJ": {
+    "name": "بولو رالف لورين قميص اوكسفورد بقصة كلاسيكية للرجال",
+    "url": "https://www.amazon.sa/dp/B0BQDZ83WJ",
+    "price": 591.0
+  },
+  "B0B7BPPKRT": {
+    "name": "بولو رالف لورين وافل للرجال",
+    "url": "https://www.amazon.sa/dp/B0B7BPPKRT",
+    "price": 667.0
+  },
+  "B01M32P5NO": {
+    "name": "الإعلان المدعوم - تي شيرت للنساء من لاكوست",
+    "url": "https://www.amazon.sa/dp/B01M32P5NO",
+    "price": 199.0
+  },
+  "B0FCSC8V67": {
+    "name": "قميص بولو درايف للرجال من اديداس",
+    "url": "https://www.amazon.sa/dp/B0FCSC8V67",
+    "price": 145.0
+  },
+  "B07PP27KH4": {
+    "name": "قودي ذرة ذهبية كاملة 340 غرام، حلوة طبيعيًا، بدون سكر مضاف",
+    "url": "https://www.amazon.sa/dp/B07PP27KH4",
+    "price": 5.0
   }
 }
