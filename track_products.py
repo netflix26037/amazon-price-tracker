@@ -4,7 +4,8 @@ track_products.py
 يشتغل هذا السكربت داخل GitHub Actions (أو محليًا) ووظيفته:
   1) يقارن products.json الحالي مع state.json (آخر حالة معروفة)
   2) يرسل إشعار تلغرام "منتج جديد" فقط للمنتجات اللي ما كانت موجودة من قبل
-  3) للمنتجات القديمة، يتأكد من السعر عبر PA-API ويرسل إشعار فقط لو تغيّر السعر
+  3) للمنتجات القديمة، يتأكد من السعر عبر PA-API ويرسل إشعار فقط إذا
+     انخفض السعر (الزيادة لا تُرسل أي إشعار، بناءً على طلب المستخدم)
   4) يحدّث state.json بالحالة الجديدة (يحتاج الـ workflow يسوي commit له بعد التشغيل)
 
 المتطلبات (تحطها كـ GitHub Secrets في المستودع):
@@ -91,8 +92,6 @@ def get_price_via_paapi(asin: str):
     # from paapi5_python_sdk.api.default_api import DefaultApi
     # from paapi5_python_sdk.models.get_items_request import GetItemsRequest
     # ... الخ حسب توثيق أمازون الرسمي
-    #
-    # مثال مبسّط جدًا (غير فعّال فعليًا بدون SDK):
     raise NotImplementedError(
         "اربط هذي الدالة بمكتبة paapi5-python-sdk الرسمية قبل التشغيل الفعلي."
     )
@@ -109,7 +108,7 @@ def main():
             current_asins[asin] = p.get("name", "")
 
     new_count = 0
-    changed_count = 0
+    dropped_count = 0
     checked_count = 0
 
     for asin, name in current_asins.items():
@@ -136,16 +135,18 @@ def main():
         checked_count += 1
         old_price = state[asin].get("price")
 
-        if price is not None and old_price is not None and price != old_price:
-            direction = "⬇️ انخفض" if price < old_price else "⬆️ ارتفع"
+        # الإشعار يُرسل فقط إذا انخفض السعر (مو لو ارتفع)
+        if price is not None and old_price is not None and price < old_price:
             send_telegram(
-                f"{direction} <b>سعر منتج</b>\n{name}\n"
+                f"⬇️ <b>انخفض سعر منتج</b>\n{name}\n"
                 f"السعر القديم: {old_price} {currency or ''}\n"
                 f"السعر الجديد: {price} {currency or ''}\n"
                 f"https://www.amazon.sa/dp/{asin}"
             )
-            changed_count += 1
+            dropped_count += 1
 
+        # نحدّث السعر المخزّن دائمًا (سواء زاد أو نقص) عشان المقارنة
+        # القادمة تكون صحيحة، لكن بدون إرسال إشعار على الزيادة
         if price is not None:
             state[asin]["price"] = price
             state[asin]["name"] = name
@@ -155,7 +156,7 @@ def main():
     save_json(STATE_FILE, state)
 
     print(
-        f"تم: منتجات جديدة={new_count}، أسعار متغيرة={changed_count}، "
+        f"تم: منتجات جديدة={new_count}، أسعار منخفضة تم الإشعار عنها={dropped_count}، "
         f"تم فحصها={checked_count}، الإجمالي في الملف={len(current_asins)}"
     )
 
