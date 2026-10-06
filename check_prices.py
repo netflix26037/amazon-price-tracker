@@ -3,31 +3,24 @@
 
 الفكرة:
 - يقرأ قائمة المنتجات من products.json
-- يفتح كل رابط ويحاول يستخرج السعر الحالي وصورة المنتج من صفحة أمازون
-- يقارن السعر بالسعر المحفوظ من آخر مرة، بالاعتماد على رقم المنتج (ASIN)
-  وليس الرابط الكامل -- لأن الرابط ممكن يتغيّر شكله لنفس المنتج بالضبط.
-- منتج جديد (ASIN غير موجود بالتاريخ): يُسجَّل السعر كخط أساس بصمت، بدون أي
-  رسالة تيليجرام.
-- منتج معروف: يُرسل إشعار فقط لو السعر تغيّر فعليًا (طلع أو نزل).
+- يفتح كل رابط ويحاول يستخرج: السعر الحالي، السعر الأصلي قبل الخصم (المشطوب
+  إن وُجد)، وصورة المنتج
+- يقارن السعر بالسعر المحفوظ من آخر مرة (في prices_history.json)، بالاعتماد
+  على رقم المنتج (ASIN) وليس الرابط الكامل -- لأن الرابط ممكن يتغيّر شكله
+  لنفس المنتج بالضبط.
+- منتج جديد (ASIN غير موجود بالتاريخ): يُسجَّل كخط أساس بصمت، بدون أي رسالة.
+- منتج معروف: يُرسل إشعار فقط لو السعر **نزل** فعليًا (مو لو ارتفع)، مع نسبة
+  الخصم عن السعر الأصلي إن كانت متوفرة، وإشارة لو السعر وصل لأدنى مستوى له
+  على الإطلاق أو أقل من المعتاد. لو السعر ارتفع، يُحدَّث السجل بصمت بدون
+  أي إشعار.
+- يحدّث لكل منتج: أقل سعر وأعلى سعر ومتوسط سعر تراكمي (min_price/max_price/
+  avg_price) -- هذا هو الأساس اللي تعتمد عليه لوحة عرض الأسعار لاحقًا لحساب
+  "أقل من المعتاد" الحقيقي، مو بس مقارنة بآخر مرة.
 
---- نظام الدفعات (Batching) ---
-عشان قائمة منتجات كبيرة (آلاف المنتجات) ما تتجاوز الحد الأقصى لوقت تشغيل
-GitHub Actions (6 ساعات)، السكريبت يدعم تقسيم المنتجات لعدة دفعات تشتغل
-بالتوازي، كل دفعة لها متغيرين بيئة:
+يشتغل عادة عن طريق GitHub Actions على جدول زمني (مثلاً كل 6 ساعات).
 
-  BATCH_INDEX : رقم الدفعة (يبدأ من 0)
-  BATCH_COUNT : العدد الكلي للدفعات
-
-كل دفعة تاخذ فقط المنتجات اللي رقمها (index % BATCH_COUNT == BATCH_INDEX)،
-بحيث توزيع المنتجات متساوي تقريبًا بين كل الدفعات، وكل دفعة لها ملف تاريخ
-أسعار خاص فيها (prices_history_batchN.json) عشان ما يصير تعارض (Conflict)
-لما أكثر من دفعة تحاول تحفظ نفس الملف بنفس الوقت.
-
-لو ما تم ضبط BATCH_COUNT (أو كانت قيمته 1)، السكريبت يشتغل عادي على كل
-المنتجات بملف تاريخ واحد (prices_history.json).
-
-⚠️ مهم: الـ workflow (GitHub Actions) لازم يسوي commit + push لملف
-(ات) prices_history بعد كل تشغيلة، وإلا التاريخ يضيع.
+⚠️ مهم: الـ workflow لازم يسوي commit + push لملف prices_history.json بعد
+كل تشغيلة، وإلا التاريخ (وبالتالي أقل/أعلى/متوسط سعر) يضيع.
 """
 
 import json
@@ -35,25 +28,14 @@ import os
 import re
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup
 
 PRODUCTS_FILE = Path("products.json")
-
-# --- إعدادات الدفعات ---
-BATCH_INDEX = int(os.environ.get("BATCH_INDEX", "0"))
-BATCH_COUNT = int(os.environ.get("BATCH_COUNT", "1"))
-
-if BATCH_COUNT > 1:
-    HISTORY_FILE = Path(f"prices_history_batch{BATCH_INDEX}.json")
-else:
-    HISTORY_FILE = Path("prices_history.json")
-
-# كل كم منتج نحفظ التاريخ على القرص أثناء التشغيل (حماية إضافية لو صار
-# أي انقطاع غير متوقع في نص الطريق)
-SAVE_EVERY = 20
+HISTORY_FILE = Path("prices_history.json")
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
@@ -61,7 +43,10 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 # إفصاح إلزامي حسب اتفاقية تشغيل برنامج أمازون أسوشييتس.
 AFFILIATE_DISCLOSURE = "📌 بصفتي شريك أمازون أسوشييتس، أكسب عمولة من المشتريات المؤهلة."
 
-# نتظاهر بأننا متصفح حقيقي عشان نقلل فرصة الحظر
+# السعر الحالي يُعتبر "أقل من المعتاد" لو كان أقل من هذه النسبة من المتوسط
+# التاريخي (0.95 يعني أقل بـ5% على الأقل من المتوسط المسجّل قبل هذه القراءة)
+BELOW_USUAL_RATIO = 0.95
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -72,7 +57,6 @@ HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 }
 
-# محاولات مختلفة لاستخراج السعر لأن أمازون بيغيّر شكل الصفحة أحيانًا
 PRICE_SELECTORS = [
     {"id": "priceblock_ourprice"},
     {"id": "priceblock_dealprice"},
@@ -81,21 +65,6 @@ PRICE_SELECTORS = [
     {"class_": "a-offscreen"},
 ]
 
-# selectors إضافية (CSS) لأشكال صفحات المنتجات الحديثة -- تُجرَّب بعد
-# القديمة فقط
-EXTRA_PRICE_CSS = [
-    "#corePriceDisplay_desktop_feature_div .priceToPay .a-offscreen",
-    "#corePrice_feature_div .a-price .a-offscreen",
-    "#corePrice_desktop .a-price .a-offscreen",
-    "#apex_desktop .a-price .a-offscreen",
-    ".priceToPay .a-offscreen",
-    "#price_inside_buybox",
-    "#newBuyBoxPrice",
-    "#tp_price_block_total_price_ww .a-offscreen",
-    "span.a-price span.a-offscreen",
-]
-
-# محاولات مختلفة لاستخراج صورة المنتج
 IMAGE_SELECTORS = [
     {"id": "landingImage"},
     {"id": "imgBlkFront"},
@@ -104,9 +73,7 @@ IMAGE_SELECTORS = [
 
 
 def extract_asin(url: str):
-    """يستخرج رقم المنتج (ASIN) من الرابط. هذا هو المفتاح الثابت للمنتج
-    بغض النظر عن شكل الرابط (مع/بدون tag أو باراميترات إضافية)."""
-    m = re.search(r"/(?:dp|gp/product)/([A-Z0-9]{10})", url or "")
+    m = re.search(r"/dp/([A-Z0-9]{10})", url or "")
     return m.group(1) if m else None
 
 
@@ -126,68 +93,101 @@ def save_json(path: Path, data):
     )
 
 
-def migrate_history_to_asin_keys(history: dict) -> dict:
-    """يهاجر أي مدخلات قديمة كانت مفتاحها الرابط الكامل (بدل ASIN) إلى
-    مفاتيح ASIN، بحيث ما نخسر تاريخ الأسعار المتراكم من قبل."""
+def migrate_history(history: dict) -> dict:
+    """يهاجر أي مدخلات قديمة (مفتاحها الرابط الكامل، أو بالشكل القديم
+    {price: X} بدون min/max/avg) إلى الشكل الجديد الكامل بمفاتيح ASIN،
+    بدون ما نخسر أي بيانات متراكمة سابقًا."""
     migrated = {}
-    changed = False
     for key, value in history.items():
         asin = extract_asin(key) if key.startswith("http") else key
-        if asin:
-            if asin != key:
-                changed = True
-            migrated[asin] = value
-        else:
-            changed = True
-    if changed:
-        print("تم ترحيل ملف التاريخ إلى مفاتيح ASIN.")
+        if not asin:
+            continue
+        price = value.get("price")
+        entry = {
+            "name": value.get("name", ""),
+            "url": value.get("url", ""),
+            "image_url": value.get("image_url"),
+            "price": price,
+            "list_price": value.get("list_price"),
+            "min_price": value.get("min_price", price),
+            "max_price": value.get("max_price", price),
+            "avg_price": value.get("avg_price", price),
+            "samples": value.get("samples", 1 if price is not None else 0),
+            "last_checked": value.get("last_checked"),
+        }
+        migrated[asin] = entry
     return migrated
 
 
+def clean_price(text: str):
+    cleaned = re.sub(r"[^\d.,]", "", text or "")
+    cleaned = cleaned.replace(",", "")
+    if not cleaned:
+        return None
+    try:
+        return float(cleaned)
+    except ValueError:
+        return None
+
+
 def extract_price(html: str):
-    """يحاول يستخرج السعر من صفحة أمازون بأكثر من طريقة."""
     soup = BeautifulSoup(html, "html.parser")
 
     for selector in PRICE_SELECTORS:
-        tag = soup.find(attrs=selector) if "class_" not in selector else soup.find(
-            class_=selector["class_"]
+        tag = (
+            soup.find(class_=selector["class_"])
+            if "class_" in selector
+            else soup.find(attrs=selector)
         )
         if tag and tag.text.strip():
             price = clean_price(tag.text)
             if price is not None:
                 return price
 
-    # محاولات إضافية (تُجرَّب فقط لو الـ selectors القديمة فشلت، عشان
-    # ما يتغيّر معنى الأسعار المحفوظة للمنتجات اللي كانت تشتغل أصلاً)
-    for css in EXTRA_PRICE_CSS:
-        tag = soup.select_one(css)
-        if tag and tag.text.strip():
-            price = clean_price(tag.text)
-            if price is not None:
-                return price
-
-    # في صفحات أمازون العربية العملة غالبًا قبل الرقم ("ر.س.‏ 12.50" أو
-    # "SAR 12.50")، فنجرب الترتيبين: رقم ثم عملة، أو عملة ثم رقم.
-    match = re.search(r"([\d][\d.,]*)\s*(?:ر\.?\s?س|SAR)", html)
-    if match:
-        price = clean_price(match.group(1))
-        if price is not None:
-            return price
-
-    match = re.search(r"(?:ر\.?\s?س\.?|SAR)[\s\u200e\u200f\xa0]*([\d][\d.,]*)", html)
+    match = re.search(r"([\d.,]+)\s*(?:ر\.?س|SAR)", html)
     if match:
         return clean_price(match.group(1))
 
     return None
 
 
+def extract_list_price(html: str):
+    """يحاول يستخرج السعر الأصلي (قبل الخصم / المشطوب) من صفحة أمازون.
+    شكل هذا العنصر يتغيّر كثير بين المنتجات؛ لو ما لقينا شي نرجع None
+    (يعني: ما نقدر نحسب نسبة خصم حقيقية لهذا المنتج)."""
+    soup = BeautifulSoup(html, "html.parser")
+
+    strike = soup.find(attrs={"data-a-strike": "true"})
+    if strike:
+        offscreen = strike.find(class_="a-offscreen")
+        if offscreen and offscreen.text.strip():
+            price = clean_price(offscreen.text)
+            if price is not None:
+                return price
+
+    tag = soup.find(class_="a-text-strike")
+    if tag and tag.text.strip():
+        price = clean_price(tag.text)
+        if price is not None:
+            return price
+
+    match = re.search(r"(?:كان|List Price)[^\d]{0,15}([\d.,]+)", html)
+    if match:
+        price = clean_price(match.group(1))
+        if price is not None:
+            return price
+
+    return None
+
+
 def extract_image(html: str):
-    """يحاول يستخرج رابط صورة المنتج الرئيسية من صفحة أمازون."""
     soup = BeautifulSoup(html, "html.parser")
 
     for selector in IMAGE_SELECTORS:
-        tag = soup.find(attrs=selector) if "class_" not in selector else soup.find(
-            class_=selector["class_"]
+        tag = (
+            soup.find(class_=selector["class_"])
+            if "class_" in selector
+            else soup.find(attrs=selector)
         )
         if not tag:
             continue
@@ -210,57 +210,30 @@ def extract_image(html: str):
     return None
 
 
-def clean_price(text: str):
-    """يحوّل نص السعر (فيه فواصل/رموز) لرقم عشري."""
-    cleaned = re.sub(r"[^\d.,]", "", text)
-    cleaned = cleaned.replace(",", "")
-    if not cleaned:
-        return None
-    try:
-        return float(cleaned)
-    except ValueError:
-        return None
-
-
 def fetch_product_details(url: str):
-    """يرجع (السعر, رابط الصورة, رسالة خطأ, الرابط النهائي بعد التحويل).
-
-    الرابط النهائي مهم للروابط المختصرة (amzn.eu/d/...): هذي ما فيها ASIN،
-    لكن لما نفتحها أمازون يحوّلنا لرابط المنتج الكامل (/dp/ASIN) ومنه
-    نستخرج الـ ASIN."""
+    """يرجع (السعر, السعر الأصلي, رابط الصورة, رسالة خطأ)."""
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True)
+        resp = requests.get(url, headers=HEADERS, timeout=20)
     except requests.RequestException as exc:
-        return None, None, f"خطأ في الاتصال: {exc}", None
-
-    final_url = resp.url
+        return None, None, None, f"خطأ في الاتصال: {exc}"
 
     if resp.status_code != 200:
-        return None, None, f"استجابة غير متوقعة من أمازون (كود {resp.status_code})", final_url
+        return None, None, None, f"استجابة غير متوقعة من أمازون (كود {resp.status_code})"
 
     price = extract_price(resp.text)
+    list_price = extract_list_price(resp.text)
     image_url = extract_image(resp.text)
 
     if price is None:
-        # تشخيص: نطبع معلومات تساعد نعرف السبب (صفحة تحقق أمني ولا شكل صفحة مختلف)
-        soup = BeautifulSoup(resp.text, "html.parser")
-        title = soup.title.text.strip()[:80] if soup.title and soup.title.text else "بدون عنوان"
-        lowered = resp.text.lower()
-        is_captcha = any(
-            marker in lowered
-            for marker in ("captcha", "robot check", "api-services-support@amazon.com", "automated access")
-        )
-        diag = (
-            f"[تشخيص: عنوان الصفحة={title!r}، طول الصفحة={len(resp.text)}، "
-            f"تحقق_أمني={'نعم' if is_captcha else 'لا'}، الرابط النهائي={final_url}]"
-        )
-        return None, image_url, f"لم أستطع إيجاد السعر في الصفحة {diag}", final_url
+        return None, None, image_url, "لم أستطع إيجاد السعر في الصفحة (ربما تغيّر شكل الصفحة أو طُلب تحقق أمني)"
 
-    return price, image_url, None, final_url
+    if list_price is not None and list_price <= price:
+        list_price = None
+
+    return price, list_price, image_url, None
 
 
 def send_telegram_message(text: str, image_url: str = None):
-    """يرسل رسالة تيليجرام. لو فيه صورة يرسلها مع كابشن، وإلا نص عادي."""
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("تحذير: لم يتم ضبط TELEGRAM_BOT_TOKEN أو TELEGRAM_CHAT_ID، سيتم طباعة الرسالة فقط.")
         print(text)
@@ -292,102 +265,121 @@ def send_telegram_message(text: str, image_url: str = None):
         print(f"فشل إرسال رسالة تيليجرام: {exc}")
 
 
-def select_batch(products: list) -> list:
-    """يرجع فقط المنتجات اللي تخص هذه الدفعة (توزيع متساوي عبر الدفعات
-    بدل تقسيم متتالٍ، عشان كل دفعة توخذ خليط متنوع من المنتجات)."""
-    if BATCH_COUNT <= 1:
-        return products
-    return [p for i, p in enumerate(products) if i % BATCH_COUNT == BATCH_INDEX]
+def build_change_message(name, url, old_price, price, list_price, is_below_usual, is_all_time_low):
+    # هذه الدالة تُستدعى فقط عند انخفاض السعر (شوف main) -- ما فيه حالة
+    # ارتفاع هنا لأن البوت ما يرسل إشعار إلا لما السعر ينزل.
+    diff = old_price - price
+    pct = (diff / old_price) * 100
+    lines = []
+    lines.append(f"🔻 <b>{name}</b>")
+    lines.append(f"نزل السعر من {old_price:.2f} إلى {price:.2f} ر.س (خصم {pct:.0f}%)")
+
+    if list_price:
+        discount_pct = (list_price - price) / list_price * 100
+        lines.append(f"السعر الأصلي: {list_price:.2f} ر.س (خصم {discount_pct:.0f}% عن السعر الأصلي)")
+
+    if is_all_time_low:
+        lines.append("🏆 أقل سعر تم رصده على الإطلاق لهذا المنتج")
+    elif is_below_usual:
+        lines.append("📉 أقل من متوسط سعره المعتاد")
+
+    lines.append(url)
+    lines.append("")
+    lines.append(AFFILIATE_DISCLOSURE)
+    return "\n".join(lines)
 
 
 def main():
     products = load_json(PRODUCTS_FILE, [])
-    raw_history = load_json(HISTORY_FILE, {})
-    history = migrate_history_to_asin_keys(raw_history)
+    history = migrate_history(load_json(HISTORY_FILE, {}))
 
     if not products:
         print("لا توجد منتجات في products.json")
         return
 
-    batch_products = select_batch(products)
-
-    if BATCH_COUNT > 1:
-        print(
-            f"دفعة {BATCH_INDEX + 1}/{BATCH_COUNT}: "
-            f"{len(batch_products)} منتج من إجمالي {len(products)}"
-        )
-
     new_count = 0
     changed_count = 0
+    price_up_count = 0
     unchanged_count = 0
     skipped_count = 0
 
-    for idx, product in enumerate(batch_products, start=1):
+    for product in products:
         name = product.get("name", "منتج بدون اسم")
         url = product.get("url")
         if not url:
             continue
 
-        # الروابط العادية (/dp/ASIN) فيها الـ ASIN مباشرة. الروابط المختصرة
-        # (amzn.eu/d/...) ما فيها، فنستخرجه من الرابط النهائي بعد فتحها.
         asin = extract_asin(url)
-
-        price, image_url, error, final_url = fetch_product_details(url)
-        time.sleep(15)  # فاصل بين الطلبات عشان منضغطش على أمازون
-
         if not asin:
-            asin = extract_asin(final_url)
-        if not asin:
-            print(f"[{name}] تخطي: ما قدرت أستخرج ASIN من الرابط {url} (الرابط النهائي: {final_url})")
+            print(f"[{name}] تخطي: ما قدرت أستخرج ASIN من الرابط {url}")
             skipped_count += 1
             continue
+
+        price, list_price, image_url, error = fetch_product_details(url)
+        time.sleep(15)
 
         if error:
             print(f"[{name}] {error}")
             skipped_count += 1
             continue
 
-        old_price = history.get(asin, {}).get("price")
-        message = None
+        existing = history.get(asin)
+        old_price = existing.get("price") if existing else None
+        old_avg = existing.get("avg_price") if existing else None
+        old_min = existing.get("min_price") if existing else None
+        old_samples = existing.get("samples", 0) if existing else 0
+
+        is_below_usual = (
+            old_avg is not None
+            and old_samples >= 2
+            and price < old_avg * BELOW_USUAL_RATIO
+        )
+        is_all_time_low = old_min is not None and price < old_min
 
         if old_price is None:
             new_count += 1
-        elif price < old_price:
-            diff = old_price - price
-            pct = (diff / old_price) * 100
-            message = (
-                f"🔻 <b>{name}</b>\n"
-                f"نزل السعر من {old_price:.2f} إلى {price:.2f} ر.س "
-                f"(خصم {pct:.0f}%)\n"
-                f"{url}\n\n"
-                f"{AFFILIATE_DISCLOSURE}"
-            )
-            changed_count += 1
-        elif price > old_price:
-            message = (
-                f"🔺 <b>{name}</b>\n"
-                f"ارتفع السعر من {old_price:.2f} إلى {price:.2f} ر.س\n"
-                f"{url}\n\n"
-                f"{AFFILIATE_DISCLOSURE}"
-            )
-            changed_count += 1
+            new_min = price
+            new_max = price
+            new_avg = price
+            new_samples = 1
         else:
-            unchanged_count += 1
+            new_min = min(old_min, price) if old_min is not None else price
+            new_max = max(existing.get("max_price", price), price)
+            new_avg = ((old_avg or price) * old_samples + price) / (old_samples + 1)
+            new_samples = old_samples + 1
 
-        if message:
-            send_telegram_message(message, image_url=image_url)
+            if price < old_price:
+                # السعر نزل -- هذا الحال الوحيد اللي نرسل فيه إشعار
+                message = build_change_message(
+                    name, url, old_price, price, list_price, is_below_usual, is_all_time_low
+                )
+                send_telegram_message(message, image_url=image_url)
+                changed_count += 1
+            elif price > old_price:
+                # السعر ارتفع -- نحدّث السجل بصمت بدون أي إشعار
+                price_up_count += 1
+            else:
+                unchanged_count += 1
 
-        history[asin] = {"name": name, "url": url, "price": price}
-
-        # حفظ دوري: حماية إضافية لو صار انقطاع غير متوقع في نص الطريق
-        if idx % SAVE_EVERY == 0:
-            save_json(HISTORY_FILE, history)
+        history[asin] = {
+            "name": name,
+            "url": url,
+            "image_url": image_url,
+            "price": price,
+            "list_price": list_price,
+            "min_price": new_min,
+            "max_price": new_max,
+            "avg_price": round(new_avg, 2),
+            "samples": new_samples,
+            "last_checked": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        }
 
     save_json(HISTORY_FILE, history)
 
     print(
         f"تم: منتجات جديدة (بدون إشعار)={new_count}، "
-        f"أسعار تغيّرت (تم الإشعار)={changed_count}، "
+        f"أسعار نزلت (تم الإشعار)={changed_count}، "
+        f"أسعار ارتفعت (بدون إشعار)={price_up_count}، "
         f"بدون تغيير={unchanged_count}، تم تخطيها={skipped_count}"
     )
 
