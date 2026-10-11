@@ -1,171 +1,196 @@
-"""فحص أسعار منتجات amazon.sa وإرسال تنبيه على تيليجرام عند تغيّر السعر."""
-import html
+"""
+check_prices.py
+
+يعالج ثلاث مشاكل:
+  1) تغطية كل المنتجات بالتناوب: كل تشغيل يفحص "الأقدم فحصًا" أولًا (round-robin)،
+     فبعد عدة تشغيلات كل منتج في products.json ياخذ دوره.
+  2) الحالة تنحفظ في state.json (السعر + وقت آخر فحص) والـ workflow يسوي commit لها،
+     فما يتكرر نفس المنتج ولا نفس السعر.
+  3) إشعار تلغرام فقط لما السعر ينخفض. الزيادة وعدم التغيّر بدون أي رسالة.
+
+جلب السعر: عدّل الدالة get_prices() فقط. لازم ترجع {asin: (price, currency)}
+والمنتج اللي فشل جلب سعره ما يدخل في الناتج (ما يتحدّث ولا ينرسل عنه شي).
+
+متغيرات البيئة (GitHub Secrets / env):
+  TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+  MAX_PER_RUN     عدد المنتجات في كل تشغيل (افتراضي 500)
+  BATCH_SIZE      حجم الدفعة لكل طلب (افتراضي 10، حد PA-API)
+  MIN_DROP_PCT    أقل نسبة انخفاض تستحق إشعار (افتراضي 1)
+  NOTIFY_NEW      1 لإرسال إشعار للمنتجات الجديدة (افتراضي 0)
+"""
+
 import json
 import os
-import random
 import re
-import sys
 import time
 from datetime import datetime, timezone
-from pathlib import Path
 
 import requests
-from bs4 import BeautifulSoup
 
-BASE = Path(__file__).parent
-PRODUCTS_FILE = BASE / "products.json"
-HISTORY_FILE = BASE / "prices_history.json"
-MAX_HISTORY = 200
-# تجاهل التغيّر الأقل من هذه النسبة (%) لتقليل تنبيهات تذبذب الأسعار
-MIN_CHANGE_PCT = float(os.environ.get("MIN_CHANGE_PCT", "1"))
+PRODUCTS_FILE = os.environ.get("PRODUCTS_FILE", "products.json")
+STATE_FILE = os.environ.get("STATE_FILE", "state.json")
 
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-    ),
-    "Accept-Language": "ar-SA,ar;q=0.9,en;q=0.8",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-}
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
-PRICE_SELECTORS = [
-    "#corePrice_feature_div span.a-price:not(.a-text-price) span.a-offscreen",
-    "#corePriceDisplay_desktop_feature_div span.a-price:not(.a-text-price) span.a-offscreen",
-    "span.a-price:not(.a-text-price) span.a-offscreen",
-    "#priceblock_ourprice",
-    "#priceblock_dealprice",
-    "#price_inside_buybox",
-]
+MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "500"))
+BATCH_SIZE = int(os.environ.get("BATCH_SIZE", "10"))
+MIN_DROP_PCT = float(os.environ.get("MIN_DROP_PCT", "1"))
+NOTIFY_NEW = os.environ.get("NOTIFY_NEW", "0") == "1"
+DELAY_BETWEEN_BATCHES = float(os.environ.get("DELAY_BETWEEN_BATCHES", "1.2"))
 
-ARABIC_DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩٫٬", "0123456789.,")
+ASIN_RE = re.compile(r"/dp/([A-Z0-9]{10})")
 
 
-def parse_price(text: str):
-    """يحوّل نص مثل 'SAR 15.99' أو '١٥٫٩٩ ر.س' إلى رقم."""
-    text = text.translate(ARABIC_DIGITS).replace(",", "")
-    m = re.search(r"\d+(?:\.\d+)?", text)
-    return float(m.group()) if m else None
+def extract_asin(url):
+    m = ASIN_RE.search(url or "")
+    return m.group(1) if m else None
 
 
-def extract_price(page_html: str):
-    low = page_html.lower()
-    if "captcha" in low or "api-services-support@amazon" in low:
-        raise RuntimeError("أمازون رجّع صفحة تحقق (CAPTCHA)")
-    soup = BeautifulSoup(page_html, "html.parser")
-    for sel in PRICE_SELECTORS:
-        for el in soup.select(sel):
-            price = parse_price(el.get_text(" ", strip=True))
-            if price:
-                return price
-    raise RuntimeError("ما لقيت السعر في الصفحة (ممكن المنتج غير متوفر أو تغيّر التصميم)")
+def now_iso():
+    return datetime.now(timezone.utc).isoformat()
 
 
-def fetch_price(session: requests.Session, url: str):
-    last_err = None
-    for attempt in range(3):
-        try:
-            r = session.get(url, headers=HEADERS, timeout=25)
-            if r.status_code == 200:
-                return extract_price(r.text)
-            last_err = RuntimeError(f"HTTP {r.status_code}")
-        except requests.RequestException as e:
-            last_err = e
-        except RuntimeError as e:
-            last_err = e
-        time.sleep(3 + attempt * 4 + random.random() * 2)
-    raise last_err
+def load_json(path, default):
+    if not os.path.exists(path):
+        return default
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
-def send_telegram(text: str):
-    token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
-    if not token or not chat_id:
-        print("تنبيه: TELEGRAM_BOT_TOKEN أو TELEGRAM_CHAT_ID غير مضبوطين، ما أرسلت شيء.")
-        print(text)
+def save_json(path, data):
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, path)
+
+
+def get_prices(asins):
+    """
+    اربطها بمصدر الأسعار الخاص فيك.
+    ترجع {asin: (price: float, currency: str)} وتتجاهل أي منتج فشل جلبه.
+    الموصى فيه: Amazon PA-API (GetItems) فيه 10 منتجات لكل طلب.
+    """
+    raise NotImplementedError("اربط get_prices بمصدر الأسعار (PA-API).")
+
+
+def send_telegram(text):
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        print("[telegram skipped]\n" + text)
         return
-    r = requests.post(
-        f"https://api.telegram.org/bot{token}/sendMessage",
-        json={
-            "chat_id": chat_id,
-            "text": text,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True,
-        },
-        timeout=20,
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    try:
+        requests.post(
+            url,
+            data={
+                "chat_id": TELEGRAM_CHAT_ID,
+                "text": text,
+                "parse_mode": "HTML",
+                "disable_web_page_preview": True,
+            },
+            timeout=20,
+        )
+    except Exception as e:
+        print(f"telegram error: {e}")
+
+
+def format_drop(name, asin, old, new, currency):
+    pct = (old - new) / old * 100
+    return (
+        f"⬇️ <b>{name}</b>\n"
+        f"من {old:g} إلى {new:g} {currency or ''} (−{pct:.0f}%)\n"
+        f"https://www.amazon.sa/dp/{asin}"
     )
-    if not r.ok:
-        print(f"فشل إرسال تيليجرام: {r.status_code} {r.text}")
 
 
-def load_json(path: Path, default):
-    if path.exists():
-        try:
-            return json.loads(path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            print(f"تحذير: {path.name} تالف، سيُعاد إنشاؤه.")
-    return default
+def send_in_chunks(lines, per_message=8):
+    for i in range(0, len(lines), per_message):
+        send_telegram("\n\n".join(lines[i:i + per_message]))
+        time.sleep(1.1)  # حد تلغرام للرسائل
 
 
-def main():
-    products = load_json(PRODUCTS_FILE, [])
-    history = load_json(HISTORY_FILE, {})
-    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    session = requests.Session()
-    failures = 0
-    drops = []
-
-    for i, p in enumerate(products):
-        name, url = p["name"], p["url"]
-        if "XXXXXXXXXX" in url:
-            print(f"تخطيت '{name}': لسا ما حطيت رمز المنتج الحقيقي.")
+def sync_state(products, state):
+    """يضيف المنتجات الجديدة للـ state بدون أي إشعار، ولا يحذف القديمة."""
+    new_asins = []
+    for p in products:
+        asin = extract_asin(p.get("url"))
+        if not asin:
             continue
-        if i:
-            time.sleep(random.uniform(4, 9))  # فاصل بين المنتجات لتقليل احتمال الحظر
-
-        try:
-            price = fetch_price(session, url)
-        except Exception as e:
-            failures += 1
-            print(f"✗ {name}: {e}")
-            continue
-
-        entry = history.setdefault(url, {"name": name, "last_price": None, "history": []})
-        entry["name"] = name
-
-        # أقل سعر سُجّل للمنتج (يدعم السجلات القديمة اللي ما فيها lowest_price)
-        lowest = entry.get("lowest_price")
-        if lowest is None:
-            known = [h["price"] for h in entry["history"]]
-            if entry["last_price"] is not None:
-                known.append(entry["last_price"])
-            lowest = min(known) if known else None
-
-        if lowest is None:
-            entry["lowest_price"] = price  # أول تسجيل بدون إرسال
+        if asin not in state:
+            state[asin] = {
+                "name": p.get("name", ""),
+                "price": None,
+                "currency": None,
+                "last_checked": None,
+            }
+            new_asins.append(asin)
         else:
-            pct = (price - lowest) / lowest * 100
-            if price < lowest and abs(pct) >= MIN_CHANGE_PCT:
-                link = f'<a href="{html.escape(url)}">{html.escape(name)}</a>'
-                drops.append(f"📉 {link}\nأقل سعر سابق {lowest:.2f} ← <b>{price:.2f}</b> ريال ({pct:.0f}%)")
-                entry["lowest_price"] = price
-            else:
-                entry["lowest_price"] = lowest
+            state[asin]["name"] = p.get("name", state[asin].get("name", ""))
+    return new_asins
 
-        if entry["last_price"] != price:
-            entry["history"].append({"t": now, "price": price})
-            entry["history"] = entry["history"][-MAX_HISTORY:]
-        entry["last_price"] = price
-        entry["updated"] = now
-        print(f"✓ {name}: {price:.2f} (أقل سعر مسجّل: {entry['lowest_price']:.2f})")
 
+def pick_batch(state, valid_asins, limit):
+    """الأقدم فحصًا أولًا. اللي ما انفحص أبدًا يجي قبل الكل."""
+    candidates = [a for a in state if a in valid_asins]
+    candidates.sort(key=lambda a: state[a].get("last_checked") or "")
+    return candidates[:limit]
+
+
+def run(products=None, state=None, price_fn=None, notify=send_in_chunks):
+    products = products if products is not None else load_json(PRODUCTS_FILE, [])
+    state = state if state is not None else load_json(STATE_FILE, {})
+    price_fn = price_fn or get_prices
+
+    valid_asins = {extract_asin(p.get("url")) for p in products} - {None}
+    new_asins = sync_state(products, state)
+
+    if NOTIFY_NEW and new_asins:
+        notify([f"🆕 <b>{state[a]['name']}</b>\nhttps://www.amazon.sa/dp/{a}"
+                for a in new_asins[:50]])
+
+    batch = pick_batch(state, valid_asins, MAX_PER_RUN)
+    drops, checked, failed = [], 0, 0
+
+    for i in range(0, len(batch), BATCH_SIZE):
+        chunk = batch[i:i + BATCH_SIZE]
+        try:
+            prices = price_fn(chunk)
+        except NotImplementedError:
+            print("get_prices غير مربوطة بمصدر أسعار بعد. توقف.")
+            break
+        except Exception as e:
+            print(f"batch failed: {e}")
+            failed += len(chunk)
+            continue
+
+        for asin in chunk:
+            if asin not in prices:
+                failed += 1
+                continue  # ما نلمس last_checked، يبقى أولوية للتشغيل الجاي
+            price, currency = prices[asin]
+            entry = state[asin]
+            old = entry.get("price")
+            entry["last_checked"] = now_iso()
+            checked += 1
+
+            if old is not None and price < old:
+                if (old - price) / old * 100 >= MIN_DROP_PCT:
+                    drops.append(format_drop(entry["name"], asin, old, price, currency))
+
+            entry["price"] = price
+            entry["currency"] = currency
+
+        time.sleep(DELAY_BETWEEN_BATCHES)
+
+    save_json(STATE_FILE, state)
     if drops:
-        send_telegram("🔔 <b>انخفضت أسعار</b>\n\n" + "\n\n".join(drops))
+        notify(drops)
 
-    HISTORY_FILE.write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding="utf-8")
-    if failures:
-        print(f"{failures} منتج/منتجات فشل فحصها.")
-        sys.exit(1)
+    unchecked = sum(1 for a in valid_asins if not state.get(a, {}).get("last_checked"))
+    print(f"checked={checked} failed={failed} drops={len(drops)} "
+          f"new={len(new_asins)} never_checked_left={unchecked} total={len(valid_asins)}")
+    return {"checked": checked, "failed": failed, "drops": len(drops)}
 
 
 if __name__ == "__main__":
-    main()
+    run()
