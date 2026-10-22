@@ -9400,7 +9400,7 @@
     "avg_price": 18.32,
     "samples": 6,
     "last_checked": "2026-10-20T05:50:26+00:00",
-    "last_attempt": "2026-10-20T05:50:26+00:00",
+    "last_attempt": "2026-10-22T16:49:28+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9415,7 +9415,7 @@
     "avg_price": 3.0,
     "samples": 5,
     "last_checked": "2026-10-20T05:50:33+00:00",
-    "last_attempt": "2026-10-20T05:50:33+00:00",
+    "last_attempt": "2026-10-22T16:49:39+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9430,7 +9430,7 @@
     "avg_price": 14.95,
     "samples": 6,
     "last_checked": "2026-10-20T05:50:40+00:00",
-    "last_attempt": "2026-10-20T05:50:40+00:00",
+    "last_attempt": "2026-10-22T16:50:43+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9445,7 +9445,7 @@
     "avg_price": 17.32,
     "samples": 5,
     "last_checked": "2026-10-20T05:50:50+00:00",
-    "last_attempt": "2026-10-20T05:50:50+00:00",
+    "last_attempt": "2026-10-22T16:52:49+00:00",
     "last_alert_price": 16.9,
     "last_alert_at": "2026-10-14T21:52:55+00:00"
   },
@@ -9460,7 +9460,7 @@
     "avg_price": 30.25,
     "samples": 6,
     "last_checked": "2026-10-20T05:50:59+00:00",
-    "last_attempt": "2026-10-20T05:50:59+00:00",
+    "last_attempt": "2026-10-22T16:55:55+00:00",
     "last_alert_price": 23.77,
     "last_alert_at": "2026-10-16T14:34:34+00:00"
   },
@@ -9475,7 +9475,7 @@
     "avg_price": 18.59,
     "samples": 5,
     "last_checked": "2026-10-20T05:51:08+00:00",
-    "last_attempt": "2026-10-20T05:51:08+00:00",
+    "last_attempt": "2026-10-22T17:00:02+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9490,7 +9490,7 @@
     "avg_price": 34.25,
     "samples": 6,
     "last_checked": "2026-10-20T05:51:17+00:00",
-    "last_attempt": "2026-10-20T05:51:17+00:00",
+    "last_attempt": "2026-10-22T17:05:10+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9505,7 +9505,7 @@
     "avg_price": 24.8,
     "samples": 5,
     "last_checked": "2026-10-20T05:51:23+00:00",
-    "last_attempt": "2026-10-20T05:51:23+00:00",
+    "last_attempt": "2026-10-22T17:10:15+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9520,7 +9520,7 @@
     "avg_price": 10.14,
     "samples": 6,
     "last_checked": "2026-10-20T05:51:33+00:00",
-    "last_attempt": "2026-10-20T05:51:33+00:00",
+    "last_attempt": "2026-10-22T17:10:27+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9535,7 +9535,7 @@
     "avg_price": 32.18,
     "samples": 6,
     "last_checked": "2026-10-20T05:51:42+00:00",
-    "last_attempt": "2026-10-20T05:51:42+00:00",
+    "last_attempt": "2026-10-22T17:11:31+00:00",
     "last_alert_price": 30.09,
     "last_alert_at": "2026-10-20T05:51:42+00:00"
   },
@@ -9550,7 +9550,7 @@
     "avg_price": 27.99,
     "samples": 5,
     "last_checked": "2026-10-20T05:51:54+00:00",
-    "last_attempt": "2026-10-20T05:51:54+00:00",
+    "last_attempt": "2026-10-22T17:13:39+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9565,7 +9565,7 @@
     "avg_price": 9.67,
     "samples": 6,
     "last_checked": "2026-10-20T05:52:00+00:00",
-    "last_attempt": "2026-10-20T05:52:00+00:00",
+    "last_attempt": "2026-10-22T17:13:45+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9573,16 +9573,16 @@
     "name": "فرشاة اسنان اورال بى بالبطارية، تلقائي،",
     "url": "https://www.amazon.sa/dp/B0BPCWZK65?tag=mohammedala02-21",
     "image_url": "https://m.media-amazon.com/images/I/71boNAfz57L._AC_SL1500_.jpg",
-    "price": 72.5,
+    "price": 66.34,
     "list_price": 79.0,
-    "min_price": 72.5,
+    "min_price": 66.34,
     "max_price": 86.0,
-    "avg_price": 76.22,
-    "samples": 5,
-    "last_checked": "2026-10-20T05:52:08+00:00",
-    "last_attempt": "2026-10-20T05:52:08+00:00",
-    "last_alert_price": 75.0,
-    "last_alert_at": "2026-10-13T05:08:12+00:00"
+    "avg_price": 74.57,
+    "samples": 6,
+    "last_checked": "2026-10-22T17:17:52+00:00",
+    "last_attempt": "2026-10-22T17:17:52+00:00",
+    "last_alert_price": 66.34,
+    "last_alert_at": "2026-10-22T17:17:52+00:00"
   },
   "B010V82ZD0": {
     "name": "فرشاة بالفحم بشعيرات ورفيعة كولجيت",
@@ -9595,7 +9595,7 @@
     "avg_price": 27.5,
     "samples": 5,
     "last_checked": "2026-10-20T05:52:16+00:00",
-    "last_attempt": "2026-10-20T05:52:16+00:00",
+    "last_attempt": "2026-10-22T17:18:04+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9603,16 +9603,16 @@
     "name": "كولجيت فرشاة اسنان يدوية فيزيبل",
     "url": "https://www.amazon.sa/dp/B0B254G5L6?tag=mohammedala02-21",
     "image_url": "https://m.media-amazon.com/images/I/61-AIrtxxEL._AC_SL1000_.jpg",
-    "price": 24.5,
+    "price": 24.0,
     "list_price": 27.0,
-    "min_price": 24.5,
+    "min_price": 24.0,
     "max_price": 25.5,
-    "avg_price": 24.8,
-    "samples": 5,
-    "last_checked": "2026-10-20T05:52:22+00:00",
-    "last_attempt": "2026-10-20T05:52:22+00:00",
-    "last_alert_price": 24.5,
-    "last_alert_at": "2026-10-16T14:36:03+00:00"
+    "avg_price": 24.67,
+    "samples": 6,
+    "last_checked": "2026-10-22T17:19:10+00:00",
+    "last_attempt": "2026-10-22T17:19:10+00:00",
+    "last_alert_price": 24.0,
+    "last_alert_at": "2026-10-22T17:19:10+00:00"
   },
   "B09J4KSF6Z": {
     "name": "بكتيريا اورال بي تشكيلة اكسبرت، متعددة،",
@@ -9625,7 +9625,7 @@
     "avg_price": 28.8,
     "samples": 5,
     "last_checked": "2026-10-20T05:52:28+00:00",
-    "last_attempt": "2026-10-20T05:52:28+00:00",
+    "last_attempt": "2026-10-22T17:19:21+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9640,7 +9640,7 @@
     "avg_price": 98.0,
     "samples": 6,
     "last_checked": "2026-10-20T05:52:36+00:00",
-    "last_attempt": "2026-10-20T05:52:36+00:00",
+    "last_attempt": "2026-10-22T17:20:26+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9655,7 +9655,7 @@
     "avg_price": 7.07,
     "samples": 6,
     "last_checked": "2026-10-20T05:52:42+00:00",
-    "last_attempt": "2026-10-20T05:52:42+00:00",
+    "last_attempt": "2026-10-22T17:22:32+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9670,7 +9670,7 @@
     "avg_price": 10.14,
     "samples": 6,
     "last_checked": "2026-10-20T05:52:50+00:00",
-    "last_attempt": "2026-10-20T05:52:50+00:00",
+    "last_attempt": "2026-10-22T17:25:39+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9685,7 +9685,7 @@
     "avg_price": 17.22,
     "samples": 6,
     "last_checked": "2026-10-20T05:52:56+00:00",
-    "last_attempt": "2026-10-20T05:52:56+00:00",
+    "last_attempt": "2026-10-22T17:29:47+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9700,7 +9700,7 @@
     "avg_price": 19.34,
     "samples": 6,
     "last_checked": "2026-10-20T05:53:02+00:00",
-    "last_attempt": "2026-10-20T05:53:02+00:00",
+    "last_attempt": "2026-10-22T17:34:52+00:00",
     "last_alert_price": 17.0,
     "last_alert_at": "2026-10-15T03:54:59+00:00"
   },
@@ -9715,7 +9715,7 @@
     "avg_price": 27.99,
     "samples": 6,
     "last_checked": "2026-10-20T05:53:12+00:00",
-    "last_attempt": "2026-10-20T05:53:12+00:00",
+    "last_attempt": "2026-10-22T17:35:23+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9730,7 +9730,7 @@
     "avg_price": 34.41,
     "samples": 6,
     "last_checked": "2026-10-20T05:53:18+00:00",
-    "last_attempt": "2026-10-20T05:53:18+00:00",
+    "last_attempt": "2026-10-22T17:40:29+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9745,7 +9745,7 @@
     "avg_price": 4.6,
     "samples": 6,
     "last_checked": "2026-10-20T05:53:26+00:00",
-    "last_attempt": "2026-10-20T05:53:26+00:00",
+    "last_attempt": "2026-10-22T17:45:37+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9760,7 +9760,7 @@
     "avg_price": 75.0,
     "samples": 6,
     "last_checked": "2026-10-20T05:53:32+00:00",
-    "last_attempt": "2026-10-20T05:53:32+00:00",
+    "last_attempt": "2026-10-22T17:50:45+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9775,7 +9775,7 @@
     "avg_price": 68.0,
     "samples": 6,
     "last_checked": "2026-10-20T05:53:41+00:00",
-    "last_attempt": "2026-10-20T05:53:41+00:00",
+    "last_attempt": "2026-10-22T17:55:53+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9790,7 +9790,7 @@
     "avg_price": 459.0,
     "samples": 6,
     "last_checked": "2026-10-20T05:53:49+00:00",
-    "last_attempt": "2026-10-20T05:53:49+00:00",
+    "last_attempt": "2026-10-22T17:56:24+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9805,7 +9805,7 @@
     "avg_price": 179.0,
     "samples": 6,
     "last_checked": "2026-10-20T05:53:54+00:00",
-    "last_attempt": "2026-10-20T05:53:54+00:00",
+    "last_attempt": "2026-10-22T18:01:30+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9820,7 +9820,7 @@
     "avg_price": 44.0,
     "samples": 6,
     "last_checked": "2026-10-20T05:54:01+00:00",
-    "last_attempt": "2026-10-20T05:54:01+00:00",
+    "last_attempt": "2026-10-22T18:06:39+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -9835,7 +9835,7 @@
     "avg_price": 55.0,
     "samples": 6,
     "last_checked": "2026-10-20T05:54:07+00:00",
-    "last_attempt": "2026-10-20T05:54:07+00:00",
+    "last_attempt": "2026-10-22T18:11:45+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
