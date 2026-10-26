@@ -6,7 +6,10 @@
   بالمنتجات اللي ما انفحصت أبدًا، ثم الأقدم فحصًا، ويكمل لين تخلص ميزانية
   الوقت (افتراضيًا 5 ساعات و10 دقائق). يعني التشغيلة الجاية تكمل من حيث وقفت
   بدل ما تعيد نفس أول المنتجات كل مرة.
-- يحفظ prices_history.json كل 25 منتج، وفي النهاية، حتى لو انقطع التشغيل.
+- يقرأ كل ملفات السجل الموجودة (prices_history.json + prices_history_batch0..N.json)
+  ويدمجها، ثم يكتب دائمًا في ملف واحد: prices_history.json (كل 25 منتج وفي النهاية،
+  حتى لو انقطع التشغيل). ملفات الدفعات القديمة تبقى للقراءة فقط وتقدر تحذفها بعد
+  أول تشغيلة ناجحة.
 - المفتاح الثابت لكل منتج: رقم ASIN، أو كود الرابط المختصر (amzn.eu/d/XXXX)
   للروابط اللي ما فيها ASIN -- فما يتجاهل أي منتج.
 - يرسل إشعار تيليجرام فقط لما السعر ينزل فعليًا، وبشروط تمنع التكرار:
@@ -163,6 +166,29 @@ def migrate_history(history: dict) -> dict:
             "last_alert_at": value.get("last_alert_at"),
         }
     return out
+
+
+
+def load_all_history():
+    """يقرأ كل ملفات السجل الموجودة (prices_history.json وأي prices_history_batchN.json)
+    ويدمجها بدون أي خسارة: لكل منتج نأخذ أحدث قراءة (حسب last_checked).
+    الكتابة بعدها تكون دائمًا في ملف واحد: prices_history.json."""
+    merged = {}
+    for path in sorted(Path(".").glob("prices_history*.json")):
+        raw = load_json(path, {})
+        if not isinstance(raw, dict):
+            print(f"تنبيه: تجاهلت {path.name} (شكله مو قاموس منتجات).")
+            continue
+        for key, value in migrate_history(raw).items():
+            current = merged.get(key)
+            if current is None:
+                merged[key] = value
+                continue
+            newer = (value.get("last_checked") or "") > (current.get("last_checked") or "")
+            only_has_price = value.get("price") is not None and current.get("price") is None
+            if newer or only_has_price:
+                merged[key] = value
+    return merged
 
 
 def empty_entry(name, url):
@@ -430,7 +456,7 @@ def polite_sleep():
 def main():
     start = time.monotonic()
     products = load_json(PRODUCTS_FILE, [])
-    history = migrate_history(load_json(HISTORY_FILE, {}))
+    history = load_all_history()
 
     if not products:
         print("لا توجد منتجات في products.json")
