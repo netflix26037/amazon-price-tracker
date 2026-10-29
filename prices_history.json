@@ -100960,7 +100960,7 @@
     "avg_price": 476.46,
     "samples": 7,
     "last_checked": "2026-10-27T07:34:55+00:00",
-    "last_attempt": "2026-10-27T07:34:55+00:00",
+    "last_attempt": "2026-10-29T12:29:42+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -100975,7 +100975,7 @@
     "avg_price": 345.02,
     "samples": 7,
     "last_checked": "2026-10-27T07:35:05+00:00",
-    "last_attempt": "2026-10-27T07:35:05+00:00",
+    "last_attempt": "2026-10-29T12:30:48+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -100990,7 +100990,7 @@
     "avg_price": 522.07,
     "samples": 7,
     "last_checked": "2026-10-27T07:35:11+00:00",
-    "last_attempt": "2026-10-27T07:35:11+00:00",
+    "last_attempt": "2026-10-29T12:32:52+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101002,10 +101002,10 @@
     "list_price": null,
     "min_price": 330.08,
     "max_price": 349.97,
-    "avg_price": 332.57,
-    "samples": 8,
-    "last_checked": "2026-10-27T07:35:19+00:00",
-    "last_attempt": "2026-10-27T07:35:19+00:00",
+    "avg_price": 334.5,
+    "samples": 9,
+    "last_checked": "2026-10-29T12:36:00+00:00",
+    "last_attempt": "2026-10-29T12:36:00+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101017,10 +101017,10 @@
     "list_price": null,
     "min_price": 268.76,
     "max_price": 309.37,
-    "avg_price": 283.99,
-    "samples": 8,
-    "last_checked": "2026-10-27T07:35:27+00:00",
-    "last_attempt": "2026-10-27T07:35:27+00:00",
+    "avg_price": 282.3,
+    "samples": 9,
+    "last_checked": "2026-10-29T12:36:07+00:00",
+    "last_attempt": "2026-10-29T12:36:07+00:00",
     "last_alert_price": 268.76,
     "last_alert_at": "2026-10-18T01:24:54+00:00"
   },
@@ -101035,7 +101035,7 @@
     "avg_price": 312.42,
     "samples": 8,
     "last_checked": "2026-10-27T07:35:35+00:00",
-    "last_attempt": "2026-10-27T07:35:35+00:00",
+    "last_attempt": "2026-10-29T12:36:15+00:00",
     "last_alert_price": 309.37,
     "last_alert_at": "2026-10-18T01:25:09+00:00"
   },
@@ -101050,7 +101050,7 @@
     "avg_price": 186.01,
     "samples": 7,
     "last_checked": "2026-10-27T07:35:43+00:00",
-    "last_attempt": "2026-10-27T07:35:43+00:00",
+    "last_attempt": "2026-10-29T12:37:22+00:00",
     "last_alert_price": 161.12,
     "last_alert_at": "2026-10-21T15:26:57+00:00"
   },
@@ -101065,7 +101065,7 @@
     "avg_price": 66.9,
     "samples": 7,
     "last_checked": "2026-10-27T07:35:53+00:00",
-    "last_attempt": "2026-10-27T07:35:53+00:00",
+    "last_attempt": "2026-10-29T12:39:27+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101080,7 +101080,7 @@
     "avg_price": 389.18,
     "samples": 8,
     "last_checked": "2026-10-27T07:35:59+00:00",
-    "last_attempt": "2026-10-27T07:35:59+00:00",
+    "last_attempt": "2026-10-29T12:42:32+00:00",
     "last_alert_price": 388.53,
     "last_alert_at": "2026-10-27T07:35:59+00:00"
   },
@@ -101092,10 +101092,10 @@
     "list_price": null,
     "min_price": 140.36,
     "max_price": 183.15,
-    "avg_price": 152.54,
-    "samples": 7,
-    "last_checked": "2026-10-27T07:36:12+00:00",
-    "last_attempt": "2026-10-27T07:36:12+00:00",
+    "avg_price": 151.03,
+    "samples": 8,
+    "last_checked": "2026-10-29T12:46:37+00:00",
+    "last_attempt": "2026-10-29T12:46:37+00:00",
     "last_alert_price": 140.36,
     "last_alert_at": "2026-10-16T05:54:45+00:00"
   },
@@ -101110,7 +101110,7 @@
     "avg_price": 390.07,
     "samples": 8,
     "last_checked": "2026-10-27T07:36:19+00:00",
-    "last_attempt": "2026-10-27T07:36:19+00:00",
+    "last_attempt": "2026-10-29T12:46:46+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101125,7 +101125,7 @@
     "avg_price": 392.99,
     "samples": 7,
     "last_checked": "2026-10-27T07:36:26+00:00",
-    "last_attempt": "2026-10-27T07:36:26+00:00",
+    "last_attempt": "2026-10-29T12:47:53+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101137,10 +101137,10 @@
     "list_price": null,
     "min_price": 317.49,
     "max_price": 366.44,
-    "avg_price": 338.46,
-    "samples": 7,
-    "last_checked": "2026-10-27T07:36:33+00:00",
-    "last_attempt": "2026-10-27T07:36:33+00:00",
+    "avg_price": 335.84,
+    "samples": 8,
+    "last_checked": "2026-10-29T12:49:57+00:00",
+    "last_attempt": "2026-10-29T12:49:57+00:00",
     "last_alert_price": 317.49,
     "last_alert_at": "2026-10-18T01:26:03+00:00"
   },
@@ -101155,7 +101155,7 @@
     "avg_price": 1247.42,
     "samples": 8,
     "last_checked": "2026-10-27T07:36:42+00:00",
-    "last_attempt": "2026-10-27T07:36:42+00:00",
+    "last_attempt": "2026-10-29T12:50:02+00:00",
     "last_alert_price": 1029.56,
     "last_alert_at": "2026-10-18T01:26:19+00:00"
   },
@@ -101168,9 +101168,9 @@
     "min_price": 1069.36,
     "max_price": 1069.36,
     "avg_price": 1069.36,
-    "samples": 7,
-    "last_checked": "2026-10-27T07:36:51+00:00",
-    "last_attempt": "2026-10-27T07:36:51+00:00",
+    "samples": 8,
+    "last_checked": "2026-10-29T12:51:07+00:00",
+    "last_attempt": "2026-10-29T12:51:07+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101185,7 +101185,7 @@
     "avg_price": 371.49,
     "samples": 7,
     "last_checked": "2026-10-27T07:36:58+00:00",
-    "last_attempt": "2026-10-27T07:36:58+00:00",
+    "last_attempt": "2026-10-29T12:51:15+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101200,7 +101200,7 @@
     "avg_price": 307.82,
     "samples": 7,
     "last_checked": "2026-10-27T07:37:07+00:00",
-    "last_attempt": "2026-10-27T07:37:07+00:00",
+    "last_attempt": "2026-10-29T12:52:20+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101215,7 +101215,7 @@
     "avg_price": 358.28,
     "samples": 7,
     "last_checked": "2026-10-27T07:37:16+00:00",
-    "last_attempt": "2026-10-27T07:37:16+00:00",
+    "last_attempt": "2026-10-29T12:54:28+00:00",
     "last_alert_price": 349.91,
     "last_alert_at": "2026-10-18T01:26:53+00:00"
   },
@@ -101230,7 +101230,7 @@
     "avg_price": 382.83,
     "samples": 7,
     "last_checked": "2026-10-27T07:37:23+00:00",
-    "last_attempt": "2026-10-27T07:37:23+00:00",
+    "last_attempt": "2026-10-29T12:57:33+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101245,7 +101245,7 @@
     "avg_price": 371.41,
     "samples": 7,
     "last_checked": "2026-10-27T07:37:32+00:00",
-    "last_attempt": "2026-10-27T07:37:32+00:00",
+    "last_attempt": "2026-10-29T13:01:41+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101260,7 +101260,7 @@
     "avg_price": 1431.69,
     "samples": 8,
     "last_checked": "2026-10-27T07:37:38+00:00",
-    "last_attempt": "2026-10-27T07:37:38+00:00",
+    "last_attempt": "2026-10-29T13:06:46+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101275,7 +101275,7 @@
     "avg_price": 472.32,
     "samples": 7,
     "last_checked": "2026-10-27T07:37:46+00:00",
-    "last_attempt": "2026-10-27T07:37:46+00:00",
+    "last_attempt": "2026-10-29T13:11:54+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101290,7 +101290,7 @@
     "avg_price": 1215.29,
     "samples": 7,
     "last_checked": "2026-10-27T07:37:53+00:00",
-    "last_attempt": "2026-10-27T07:37:53+00:00",
+    "last_attempt": "2026-10-29T13:11:59+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101305,7 +101305,7 @@
     "avg_price": 234.0,
     "samples": 7,
     "last_checked": "2026-10-27T07:38:01+00:00",
-    "last_attempt": "2026-10-27T07:38:01+00:00",
+    "last_attempt": "2026-10-29T13:17:07+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101320,7 +101320,7 @@
     "avg_price": 340.55,
     "samples": 7,
     "last_checked": "2026-10-27T07:38:08+00:00",
-    "last_attempt": "2026-10-27T07:38:08+00:00",
+    "last_attempt": "2026-10-29T13:22:12+00:00",
     "last_alert_price": 334.14,
     "last_alert_at": "2026-10-27T07:38:08+00:00"
   },
@@ -101333,9 +101333,9 @@
     "min_price": 379.83,
     "max_price": 379.83,
     "avg_price": 379.83,
-    "samples": 8,
-    "last_checked": "2026-10-27T07:38:23+00:00",
-    "last_attempt": "2026-10-27T07:38:23+00:00",
+    "samples": 9,
+    "last_checked": "2026-10-29T13:27:18+00:00",
+    "last_attempt": "2026-10-29T13:27:18+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101350,7 +101350,7 @@
     "avg_price": 357.66,
     "samples": 7,
     "last_checked": "2026-10-27T07:38:30+00:00",
-    "last_attempt": "2026-10-27T07:38:30+00:00",
+    "last_attempt": "2026-10-29T13:27:23+00:00",
     "last_alert_price": 339.38,
     "last_alert_at": "2026-10-16T05:57:01+00:00"
   },
@@ -101365,7 +101365,7 @@
     "avg_price": 348.13,
     "samples": 7,
     "last_checked": "2026-10-27T07:38:36+00:00",
-    "last_attempt": "2026-10-27T07:38:36+00:00",
+    "last_attempt": "2026-10-29T13:28:29+00:00",
     "last_alert_price": 317.81,
     "last_alert_at": "2026-10-27T07:38:36+00:00"
   },
@@ -101380,7 +101380,7 @@
     "avg_price": 368.87,
     "samples": 8,
     "last_checked": "2026-10-27T07:38:51+00:00",
-    "last_attempt": "2026-10-27T07:38:51+00:00",
+    "last_attempt": "2026-10-29T13:30:37+00:00",
     "last_alert_price": 354.81,
     "last_alert_at": "2026-10-19T22:39:41+00:00"
   },
@@ -101395,7 +101395,7 @@
     "avg_price": 340.73,
     "samples": 7,
     "last_checked": "2026-10-27T07:38:59+00:00",
-    "last_attempt": "2026-10-27T07:38:59+00:00",
+    "last_attempt": "2026-10-29T13:33:45+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101410,7 +101410,7 @@
     "avg_price": 111.18,
     "samples": 7,
     "last_checked": "2026-10-27T07:39:06+00:00",
-    "last_attempt": "2026-10-27T07:39:06+00:00",
+    "last_attempt": "2026-10-29T13:37:53+00:00",
     "last_alert_price": 93.0,
     "last_alert_at": "2026-10-16T05:57:36+00:00"
   },
@@ -101425,7 +101425,7 @@
     "avg_price": 280.59,
     "samples": 7,
     "last_checked": "2026-10-27T07:39:13+00:00",
-    "last_attempt": "2026-10-27T07:39:13+00:00",
+    "last_attempt": "2026-10-29T13:42:58+00:00",
     "last_alert_price": 119.0,
     "last_alert_at": "2026-10-27T07:39:13+00:00"
   },
@@ -101440,7 +101440,7 @@
     "avg_price": 1115.79,
     "samples": 7,
     "last_checked": "2026-10-27T07:39:27+00:00",
-    "last_attempt": "2026-10-27T07:39:27+00:00",
+    "last_attempt": "2026-10-29T13:48:05+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101455,7 +101455,7 @@
     "avg_price": 513.03,
     "samples": 8,
     "last_checked": "2026-10-27T07:39:36+00:00",
-    "last_attempt": "2026-10-27T07:39:36+00:00",
+    "last_attempt": "2026-10-29T13:53:09+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101470,7 +101470,7 @@
     "avg_price": 366.08,
     "samples": 7,
     "last_checked": "2026-10-27T07:39:42+00:00",
-    "last_attempt": "2026-10-27T07:39:42+00:00",
+    "last_attempt": "2026-10-29T13:58:18+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101485,7 +101485,7 @@
     "avg_price": 484.74,
     "samples": 7,
     "last_checked": "2026-10-27T07:39:49+00:00",
-    "last_attempt": "2026-10-27T07:39:49+00:00",
+    "last_attempt": "2026-10-29T14:03:25+00:00",
     "last_alert_price": 475.8,
     "last_alert_at": "2026-10-21T15:30:47+00:00"
   },
@@ -101500,7 +101500,7 @@
     "avg_price": 475.41,
     "samples": 7,
     "last_checked": "2026-10-27T07:39:55+00:00",
-    "last_attempt": "2026-10-27T07:39:55+00:00",
+    "last_attempt": "2026-10-29T14:08:33+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101515,7 +101515,7 @@
     "avg_price": 325.93,
     "samples": 7,
     "last_checked": "2026-10-27T07:40:01+00:00",
-    "last_attempt": "2026-10-27T07:40:01+00:00",
+    "last_attempt": "2026-10-29T14:09:05+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101530,7 +101530,7 @@
     "avg_price": 343.15,
     "samples": 7,
     "last_checked": "2026-10-27T07:40:08+00:00",
-    "last_attempt": "2026-10-27T07:40:08+00:00",
+    "last_attempt": "2026-10-29T14:14:11+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101545,7 +101545,7 @@
     "avg_price": 803.22,
     "samples": 7,
     "last_checked": "2026-10-27T07:40:18+00:00",
-    "last_attempt": "2026-10-27T07:40:18+00:00",
+    "last_attempt": "2026-10-29T14:19:18+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -101560,7 +101560,7 @@
     "avg_price": 829.2,
     "samples": 7,
     "last_checked": "2026-10-27T07:40:27+00:00",
-    "last_attempt": "2026-10-27T07:40:27+00:00",
+    "last_attempt": "2026-10-29T14:24:24+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
