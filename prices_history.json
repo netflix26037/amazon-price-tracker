@@ -190390,7 +190390,7 @@
     "avg_price": 99.5,
     "samples": 1,
     "last_checked": "2026-11-14T22:39:03+00:00",
-    "last_attempt": "2026-11-14T22:39:03+00:00",
+    "last_attempt": "2026-11-19T07:12:08+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190405,7 +190405,7 @@
     "avg_price": 104.5,
     "samples": 1,
     "last_checked": "2026-11-14T22:39:09+00:00",
-    "last_attempt": "2026-11-14T22:39:09+00:00",
+    "last_attempt": "2026-11-19T07:13:14+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190420,7 +190420,7 @@
     "avg_price": 476.1,
     "samples": 1,
     "last_checked": "2026-11-14T22:39:16+00:00",
-    "last_attempt": "2026-11-14T22:39:16+00:00",
+    "last_attempt": "2026-11-19T07:15:20+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190435,7 +190435,7 @@
     "avg_price": 36.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:39:23+00:00",
-    "last_attempt": "2026-11-14T22:39:23+00:00",
+    "last_attempt": "2026-11-19T07:18:25+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190450,7 +190450,7 @@
     "avg_price": 99.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:39:30+00:00",
-    "last_attempt": "2026-11-14T22:39:30+00:00",
+    "last_attempt": "2026-11-19T07:22:33+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190465,7 +190465,7 @@
     "avg_price": 55.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:39:37+00:00",
-    "last_attempt": "2026-11-14T22:39:37+00:00",
+    "last_attempt": "2026-11-19T07:27:40+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190480,7 +190480,7 @@
     "avg_price": 138.99,
     "samples": 1,
     "last_checked": "2026-11-14T22:39:43+00:00",
-    "last_attempt": "2026-11-14T22:39:43+00:00",
+    "last_attempt": "2026-11-19T07:32:48+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190495,7 +190495,7 @@
     "avg_price": 45.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:39:50+00:00",
-    "last_attempt": "2026-11-14T22:39:50+00:00",
+    "last_attempt": "2026-11-19T07:37:55+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190510,7 +190510,7 @@
     "avg_price": 55.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:39:59+00:00",
-    "last_attempt": "2026-11-14T22:39:59+00:00",
+    "last_attempt": "2026-11-19T07:43:00+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190525,7 +190525,7 @@
     "avg_price": 45.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:40:06+00:00",
-    "last_attempt": "2026-11-14T22:40:06+00:00",
+    "last_attempt": "2026-11-19T07:48:06+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190540,7 +190540,7 @@
     "avg_price": 45.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:40:15+00:00",
-    "last_attempt": "2026-11-14T22:40:15+00:00",
+    "last_attempt": "2026-11-19T07:53:13+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190555,7 +190555,7 @@
     "avg_price": 45.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:40:21+00:00",
-    "last_attempt": "2026-11-14T22:40:21+00:00",
+    "last_attempt": "2026-11-19T07:58:19+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190570,7 +190570,7 @@
     "avg_price": 95.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:40:30+00:00",
-    "last_attempt": "2026-11-14T22:40:30+00:00",
+    "last_attempt": "2026-11-19T08:03:24+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190585,7 +190585,7 @@
     "avg_price": 87.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:40:39+00:00",
-    "last_attempt": "2026-11-14T22:40:39+00:00",
+    "last_attempt": "2026-11-19T08:08:30+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -190600,7 +190600,7 @@
     "avg_price": 130.0,
     "samples": 1,
     "last_checked": "2026-11-14T22:40:46+00:00",
-    "last_attempt": "2026-11-14T22:40:46+00:00",
+    "last_attempt": "2026-11-19T08:13:36+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
