@@ -31540,7 +31540,7 @@
     "avg_price": 43.86,
     "samples": 16,
     "last_checked": "2026-11-15T02:52:45+00:00",
-    "last_attempt": "2026-11-15T02:52:45+00:00",
+    "last_attempt": "2026-11-20T06:16:19+00:00",
     "last_alert_price": 10.36,
     "last_alert_at": "2026-11-12T18:46:20+00:00"
   },
@@ -31555,7 +31555,7 @@
     "avg_price": 14.15,
     "samples": 16,
     "last_checked": "2026-11-15T02:52:53+00:00",
-    "last_attempt": "2026-11-15T02:52:53+00:00",
+    "last_attempt": "2026-11-20T06:17:27+00:00",
     "last_alert_price": 10.75,
     "last_alert_at": "2026-11-06T08:13:50+00:00"
   },
@@ -31570,7 +31570,7 @@
     "avg_price": 33.2,
     "samples": 16,
     "last_checked": "2026-11-15T02:53:03+00:00",
-    "last_attempt": "2026-11-15T02:53:03+00:00",
+    "last_attempt": "2026-11-20T06:19:33+00:00",
     "last_alert_price": 27.7,
     "last_alert_at": "2026-11-15T02:53:03+00:00"
   },
@@ -31585,7 +31585,7 @@
     "avg_price": 20.46,
     "samples": 15,
     "last_checked": "2026-11-15T02:53:19+00:00",
-    "last_attempt": "2026-11-15T02:53:19+00:00",
+    "last_attempt": "2026-11-20T06:22:41+00:00",
     "last_alert_price": 16.99,
     "last_alert_at": "2026-11-15T02:53:19+00:00"
   },
@@ -31600,7 +31600,7 @@
     "avg_price": 20.6,
     "samples": 16,
     "last_checked": "2026-11-15T02:53:32+00:00",
-    "last_attempt": "2026-11-15T02:53:32+00:00",
+    "last_attempt": "2026-11-20T06:26:46+00:00",
     "last_alert_price": 12.95,
     "last_alert_at": "2026-11-12T18:46:51+00:00"
   },
@@ -31615,7 +31615,7 @@
     "avg_price": 55.78,
     "samples": 16,
     "last_checked": "2026-11-15T02:53:41+00:00",
-    "last_attempt": "2026-11-15T02:53:41+00:00",
+    "last_attempt": "2026-11-20T06:31:52+00:00",
     "last_alert_price": 66.58,
     "last_alert_at": "2026-11-09T17:19:38+00:00"
   },
@@ -31630,7 +31630,7 @@
     "avg_price": 39.82,
     "samples": 16,
     "last_checked": "2026-11-15T02:53:48+00:00",
-    "last_attempt": "2026-11-15T02:53:48+00:00",
+    "last_attempt": "2026-11-20T06:36:57+00:00",
     "last_alert_price": 27.7,
     "last_alert_at": "2026-11-03T18:54:17+00:00"
   },
@@ -31645,7 +31645,7 @@
     "avg_price": 47.93,
     "samples": 12,
     "last_checked": "2026-11-15T02:53:56+00:00",
-    "last_attempt": "2026-11-15T02:53:56+00:00",
+    "last_attempt": "2026-11-20T06:42:03+00:00",
     "last_alert_price": 45.7,
     "last_alert_at": "2026-11-15T02:53:56+00:00"
   },
@@ -31660,7 +31660,7 @@
     "avg_price": 15.28,
     "samples": 16,
     "last_checked": "2026-11-15T02:54:11+00:00",
-    "last_attempt": "2026-11-15T02:54:11+00:00",
+    "last_attempt": "2026-11-20T06:47:08+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -31675,7 +31675,7 @@
     "avg_price": null,
     "samples": 0,
     "last_checked": null,
-    "last_attempt": "2026-11-15T02:54:19+00:00",
+    "last_attempt": "2026-11-20T06:52:14+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
@@ -31690,7 +31690,7 @@
     "avg_price": 16.48,
     "samples": 16,
     "last_checked": "2026-11-15T02:54:26+00:00",
-    "last_attempt": "2026-11-15T02:54:26+00:00",
+    "last_attempt": "2026-11-20T06:57:21+00:00",
     "last_alert_price": 10.95,
     "last_alert_at": "2026-11-03T18:54:54+00:00"
   },
@@ -31705,7 +31705,7 @@
     "avg_price": 42.77,
     "samples": 16,
     "last_checked": "2026-11-15T02:54:34+00:00",
-    "last_attempt": "2026-11-15T02:54:34+00:00",
+    "last_attempt": "2026-11-20T07:02:26+00:00",
     "last_alert_price": 39.5,
     "last_alert_at": "2026-11-15T02:54:34+00:00"
   },
@@ -31720,7 +31720,7 @@
     "avg_price": 64.52,
     "samples": 13,
     "last_checked": "2026-11-15T02:54:47+00:00",
-    "last_attempt": "2026-11-15T02:54:47+00:00",
+    "last_attempt": "2026-11-20T07:07:32+00:00",
     "last_alert_price": 14.95,
     "last_alert_at": "2026-11-15T02:54:47+00:00"
   },
@@ -31735,7 +31735,7 @@
     "avg_price": 88.26,
     "samples": 16,
     "last_checked": "2026-11-15T02:55:03+00:00",
-    "last_attempt": "2026-11-15T02:55:03+00:00",
+    "last_attempt": "2026-11-20T07:12:37+00:00",
     "last_alert_price": 84.55,
     "last_alert_at": "2026-11-06T08:15:40+00:00"
   },
@@ -31750,7 +31750,7 @@
     "avg_price": 46.5,
     "samples": 16,
     "last_checked": "2026-11-15T02:55:11+00:00",
-    "last_attempt": "2026-11-15T02:55:11+00:00",
+    "last_attempt": "2026-11-20T07:17:44+00:00",
     "last_alert_price": null,
     "last_alert_at": null
   },
