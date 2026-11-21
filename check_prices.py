@@ -42,6 +42,8 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
+import creators_api
+
 PRODUCTS_FILE = Path("products.json")
 HISTORY_FILE = Path("prices_history.json")
 
@@ -490,8 +492,47 @@ def main():
     stop_reason = None
     processed = 0
 
+    # --- الـ API الرسمية (Creators API): أسرع ولا تتعرض لحظر أمازون ---
+    api = creators_api.build_client()
+    api_results = {}      # مفتاح المنتج -> بيانات أو None (بدون عرض)
+    api_seen = set()      # مفاتيح سبق طلبها من الـ API
+    api_batch_failures = 0
+    stats["via_api"] = 0
+    stats["via_scrape"] = 0
+    if api:
+        print("تم تفعيل Creators API: الفحص عن طريق الـ API الرسمية.")
+
+    def api_prefetch(idx):
+        """يجيب دفعة من 10 منتجات بطلب واحد (المنتجات ذات الروابط المختصرة تروح للطريقة القديمة)."""
+        nonlocal api, api_batch_failures
+        batch = [
+            k for k in queue[idx: idx + 60]
+            if not k.startswith("short:") and k not in api_seen
+        ][: creators_api.BATCH_SIZE]
+        if not batch:
+            return
+        try:
+            res = api.lookup(batch)
+        except creators_api.FatalApiError as exc:
+            print(f"Creators API رفض الطلب ({exc}). أوقفتها لهالتشغيلة وأكمل بقراءة الصفحات.")
+            api = None
+            return
+        except creators_api.TemporaryApiError as exc:
+            api_batch_failures += 1
+            print(f"خطأ مؤقت من Creators API ({exc}) [{api_batch_failures}/3]")
+            if api_batch_failures >= 3:
+                print("تكرر الخطأ؛ أوقفتها لهالتشغيلة وأكمل بقراءة الصفحات.")
+                api = None
+            else:
+                time.sleep(20)
+            return
+        api_batch_failures = 0
+        api_seen.update(batch)
+        for k in batch:
+            api_results[k] = res.get(k)
+
     try:
-        for key in queue:
+        for idx, key in enumerate(queue):
             if time.monotonic() - start > MAX_RUNTIME_SECONDS:
                 stop_reason = "انتهت ميزانية الوقت (التشغيلة الجاية تكمل من هنا)"
                 break
@@ -503,8 +544,34 @@ def main():
             now = utc_now()
             now_iso = iso(now)
 
-            data, kind, msg = fetch_product_details(session, url)
+            used_api = False
+            if api and not key.startswith("short:") and key not in api_results and key not in api_seen:
+                api_prefetch(idx)
+            if api and key in api_results:
+                used_api = True
+                result = api_results.pop(key)
+                if result is None:
+                    data, kind, msg = None, "unavailable", "ما له عرض حاليًا حسب API أمازون (غير متوفر)"
+                else:
+                    data, kind, msg = result, None, None
+            else:
+                data, kind, msg = fetch_product_details(session, url)
             processed += 1
+            stats["via_api" if used_api else "via_scrape"] += 1
+
+            def pause():
+                if not used_api:  # الـ API تنظم السرعة بنفسها
+                    polite_sleep()
+
+            if data is None and kind == "unavailable":
+                # مو حظر ولا عطل: المنتج بس بدون عرض. لا يحسب ضمن الفشل المتتالي.
+                stats["failed"] += 1
+                entry = existing or empty_entry(name, url)
+                entry["last_attempt"] = now_iso
+                history[key] = entry
+                if processed % SAVE_EVERY == 0:
+                    save_json(HISTORY_FILE, history)
+                continue
 
             if data is None:
                 stats["failed"] += 1
@@ -520,7 +587,7 @@ def main():
                     break
                 if processed % SAVE_EVERY == 0:
                     save_json(HISTORY_FILE, history)
-                polite_sleep()
+                pause()
                 continue
 
             consecutive_failures = 0
@@ -551,14 +618,21 @@ def main():
                 if price < old_price:
                     if should_alert(old_price, price, existing, now):
                         # تأكيد: نعيد الجلب مرة وحدة ونتأكد إن السعر المنخفض ثابت
-                        time.sleep(random.uniform(2.0, 4.0))
-                        c_data, _, _ = fetch_product_details(session, url)
+                        c_data = None
+                        if used_api and api:
+                            try:
+                                c_data = api.lookup([key]).get(key)
+                            except (creators_api.FatalApiError, creators_api.TemporaryApiError) as exc:
+                                print(f"[{name}] تعذر تأكيد الانخفاض عبر الـ API: {exc}")
+                        else:
+                            time.sleep(random.uniform(2.0, 4.0))
+                            c_data, _, _ = fetch_product_details(session, url)
                         if c_data is None or abs(c_data["price"] - price) > 0.01:
                             stats["unconfirmed"] += 1
                             print(f"[{name}] انخفاض غير مؤكد ({old_price} -> {price})، تم تجاهله هالمرة.")
                             existing["last_attempt"] = now_iso
                             history[key] = existing
-                            polite_sleep()
+                            pause()
                             continue
 
                         message = build_drop_message(
@@ -572,7 +646,7 @@ def main():
                             # فشل الإرسال: نترك السعر القديم بالسجل عشان نعيد المحاولة بالجاية
                             existing["last_attempt"] = now_iso
                             history[key] = existing
-                            polite_sleep()
+                            pause()
                             continue
                     else:
                         stats["drops_suppressed"] += 1
@@ -604,7 +678,7 @@ def main():
 
             if processed % SAVE_EVERY == 0:
                 save_json(HISTORY_FILE, history)
-            polite_sleep()
+            pause()
     finally:
         save_json(HISTORY_FILE, history)
 
@@ -617,6 +691,7 @@ def main():
         f"غير مؤكدة={stats['unconfirmed']}، ارتفاعات (بدون إشعار)={stats['raised']}، "
         f"جديدة={stats['new']}، بدون تغيير={stats['unchanged']}"
     )
+    print(f"طريقة الجلب: API={stats['via_api']}، قراءة صفحات={stats['via_scrape']}")
     print(
         f"checked={stats['checked']} failed={stats['failed']} drops={stats['drops']} "
         f"raised={stats['raised']} new={stats['new']} never_checked_left={never_left} total={total}"

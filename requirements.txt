@@ -1,2 +1,3 @@
 requests>=2.31
 beautifulsoup4>=4.12
+python-amazon-paapi>=7.1
