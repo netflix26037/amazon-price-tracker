@@ -37,6 +37,11 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           # ميزانية وقت السكربت: 5 ساعات و10 دقائق (أقل من timeout أعلاه)
           MAX_RUNTIME_SECONDS: "18600"
+          # الـ API الرسمية لأمازون (Creators API). لو الأسرار فاضية يرجع لقراءة الصفحات
+          # يستخدم الأسرار الجديدة لو موجودة، وإلا الأسرار القديمة AMAZON_CLIENT_ID / AMAZON_CLIENT_SECRET
+          CREATORS_API_CREDENTIAL_ID: ${{ secrets.CREATORS_API_CREDENTIAL_ID || secrets.AMAZON_CLIENT_ID }}
+          CREATORS_API_CREDENTIAL_SECRET: ${{ secrets.CREATORS_API_CREDENTIAL_SECRET || secrets.AMAZON_CLIENT_SECRET }}
+          CREATORS_API_VERSION: ${{ secrets.CREATORS_API_VERSION || '3.2' }}
         run: python check_prices.py
 
       # always(): يحفظ السجل حتى لو السكربت انقطع أو فشل -- وإلا يضيع التقدم
